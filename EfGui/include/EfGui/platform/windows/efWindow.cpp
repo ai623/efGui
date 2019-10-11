@@ -1,4 +1,4 @@
-#include "efGuiWindow.h"
+#include "efWindow.h"
 #include "efMain.h"
 
 LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

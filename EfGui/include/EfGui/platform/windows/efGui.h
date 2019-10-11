@@ -1,5 +1,5 @@
 #pragma once
-#include "efGuiWindow.h"
+#include "efWindow.h"
 #include "efExec.h"
 
 namespace efgui 

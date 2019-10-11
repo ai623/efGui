@@ -65,6 +65,7 @@ namespace efgui
 		virtual void whenCreate() {}			//Caution: when construct, the son's virtual methods not initialized!
 		virtual void whenDestroy() {}			//Caution: when destruct virtual methods have been destroyed!
 		virtual void whenPaint() {}
+		//virtual EfWindow* clone();			//TODO
 	private:
 		bool _init();
 		void _uninit() { if (mhWnd) { DestroyWindow(mhWnd); } }

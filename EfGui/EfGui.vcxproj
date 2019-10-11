@@ -24,14 +24,14 @@
     <ClInclude Include="include\EfGui\platform\windows\efDebug.h" />
     <ClInclude Include="include\EfGui\platform\windows\efExec.h" />
     <ClInclude Include="include\EfGui\platform\windows\efGui.h" />
-    <ClInclude Include="include\EfGui\platform\windows\efGuiWindow.h" />
+    <ClInclude Include="include\EfGui\platform\windows\efWindow.h" />
     <ClInclude Include="include\EfGui\platform\windows\efMain.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\EfGui\platform\windows\efDebug.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efExec.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efGui.cpp" />
-    <ClCompile Include="include\EfGui\platform\windows\efGuiWindow.cpp" />
+    <ClCompile Include="include\EfGui\platform\windows\efWindow.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efMain.cpp" />
     <ClCompile Include="test\platform\testWindow.cpp" />
   </ItemGroup>

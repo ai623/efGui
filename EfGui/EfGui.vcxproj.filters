@@ -33,9 +33,6 @@
     <ClInclude Include="include\EfGui\platform\windows\efDebug.h">
       <Filter>头文件\windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\EfGui\platform\windows\efGuiWindow.h">
-      <Filter>头文件\windows</Filter>
-    </ClInclude>
     <ClInclude Include="include\EfGui\platform\windows\efExec.h">
       <Filter>头文件\windows</Filter>
     </ClInclude>
@@ -43,6 +40,9 @@
       <Filter>头文件\windows</Filter>
     </ClInclude>
     <ClInclude Include="include\EfGui\platform\windows\efMain.h">
+      <Filter>头文件\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\efWindow.h">
       <Filter>头文件\windows</Filter>
     </ClInclude>
   </ItemGroup>
@@ -56,13 +56,13 @@
     <ClCompile Include="include\EfGui\platform\windows\efExec.cpp">
       <Filter>源文件\windows</Filter>
     </ClCompile>
-    <ClCompile Include="include\EfGui\platform\windows\efGuiWindow.cpp">
-      <Filter>源文件\windows</Filter>
-    </ClCompile>
     <ClCompile Include="include\EfGui\platform\windows\efGui.cpp">
       <Filter>源文件\windows</Filter>
     </ClCompile>
     <ClCompile Include="include\EfGui\platform\windows\efMain.cpp">
+      <Filter>源文件\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="include\EfGui\platform\windows\efWindow.cpp">
       <Filter>源文件\windows</Filter>
     </ClCompile>
   </ItemGroup>
