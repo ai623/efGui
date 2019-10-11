@@ -29,9 +29,11 @@
     <ClInclude Include="include\EfGui\platform\windows\efMain.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\EfGui\platform\windows\efCommon.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efDebug.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efExec.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efGui.cpp" />
+    <ClCompile Include="include\EfGui\platform\windows\efPainter.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efWindow.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efMain.cpp" />
     <ClCompile Include="test\platform\testWindow.cpp" />
@@ -82,6 +84,7 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="d3d_debug_x64.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -89,7 +92,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LibraryPath>$(LibraryPath)</LibraryPath>
-    <IncludePath>D:\Bill\project\visual_studio\mylib\EfGui\EfGui\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\EfGui\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

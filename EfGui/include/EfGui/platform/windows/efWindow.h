@@ -7,18 +7,15 @@
 #include <Windows.h>
 
 #include "efCommon.h"
+#include "efPainter.h"
 
-
-
+#define _REL(p) _EfGui_Release_Comptr(p)
 
 namespace efgui 
 {
-	namespace _innerUsed 
+	namespace _efWindow
 	{
-		//extern const wchar_t gwcName[] = L"BaseWindow";
-		//extern HINSTANCE ghInstance;
-		//extern PWSTR gpCmdLine;
-		//extern int gnCmdShow;
+		LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	}
 
 	extern struct EfWindowInit efWindowInit;
@@ -48,16 +45,15 @@ namespace efgui
 		EfResult operator() ();
 	};
 
-
 	struct EfWindow 
 	{
 		//destructor
-		virtual ~EfWindow() { _uninit(); }
+		virtual ~EfWindow() { _del(); }
 		//constructor
 		EfWindow(EfNoInit){}
 		EfWindow(){ _init(); }
 		//init
-		bool init() { _init(); }
+		bool init() { _del(); _init(); }
 		//checker
 		//getter
 		int getWindowsNum() const;
@@ -67,17 +63,23 @@ namespace efgui
 		virtual void whenPaint() {}
 		//virtual EfWindow* clone();			//TODO
 	private:
+		HWND mhWnd = NULL;
+		IDXGISwapChain* mswapChain = nullptr;
+		ID3D11Texture2D* mbackBuffer = nullptr;
+		ID3D11RenderTargetView* mtargetView = nullptr;
+		EfPainter mpainter = EfPainter(EfNoInit());
+
 		bool _init();
-		void _uninit() { if (mhWnd) { DestroyWindow(mhWnd); } }
+		
+		void _uninit() { _del(); _reset(); }
+		void _del() { if (mhWnd) { DestroyWindow(mhWnd); } _REL(mswapChain); _REL(mbackBuffer); _REL(mtargetView); }
+		void _reset() { mhWnd = NULL; mswapChain = nullptr; mbackBuffer = nullptr; mtargetView = nullptr; }
 		void _copy(const EfWindow&) = delete;
 		void _move(EfWindow&&) = delete;
 
-		HWND mhWnd = NULL;
-		
-
 	public:
 		HWND getHWnd() const { return mhWnd; }
-		void setHWndNull() { mhWnd = NULL; }
-	};
 
+		friend LRESULT _efWindow::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	};
 }

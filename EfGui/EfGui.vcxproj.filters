@@ -68,5 +68,11 @@
     <ClCompile Include="include\EfGui\platform\windows\efWindow.cpp">
       <Filter>源文件\windows</Filter>
     </ClCompile>
+    <ClCompile Include="include\EfGui\platform\windows\efCommon.cpp">
+      <Filter>源文件\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="include\EfGui\platform\windows\efPainter.cpp">
+      <Filter>源文件\windows</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -15,9 +15,8 @@ private:
 int efMain() {
 	auto re = efGuiInit();
 	
-	{
-		MyWindow wnd;
-	}
+	MyWindow wnd;
+	EfPainter pt;
 
 	efExec();
 	return 0;
