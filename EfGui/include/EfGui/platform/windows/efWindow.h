@@ -7,7 +7,7 @@
 #include <Windows.h>
 
 #include "efCommon.h"
-#include "efDebug.h"
+
 
 
 
@@ -73,6 +73,7 @@ namespace efgui
 		void _move(EfWindow&&) = delete;
 
 		HWND mhWnd = NULL;
+		
 
 	public:
 		HWND getHWnd() const { return mhWnd; }

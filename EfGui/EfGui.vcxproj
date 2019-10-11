@@ -24,6 +24,7 @@
     <ClInclude Include="include\EfGui\platform\windows\efDebug.h" />
     <ClInclude Include="include\EfGui\platform\windows\efExec.h" />
     <ClInclude Include="include\EfGui\platform\windows\efGui.h" />
+    <ClInclude Include="include\EfGui\platform\windows\efPainter.h" />
     <ClInclude Include="include\EfGui\platform\windows\efWindow.h" />
     <ClInclude Include="include\EfGui\platform\windows\efMain.h" />
   </ItemGroup>

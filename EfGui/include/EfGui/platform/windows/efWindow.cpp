@@ -49,6 +49,7 @@ namespace efgui {
 		wc.lpszClassName = _innerUsed::gwcName;
 
 		if (!RegisterClassW(&wc)) {
+			_EfGui_Debug_Warning_Msg("Fail to Initialized");
 			return -1;
 		}
 		return 0;

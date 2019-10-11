@@ -45,6 +45,9 @@
     <ClInclude Include="include\EfGui\platform\windows\efWindow.h">
       <Filter>头文件\windows</Filter>
     </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\efPainter.h">
+      <Filter>头文件\windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test\platform\testWindow.cpp">
