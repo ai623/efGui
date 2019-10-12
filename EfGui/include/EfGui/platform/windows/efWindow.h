@@ -15,6 +15,10 @@ namespace efgui
 {
 	namespace _efWindow
 	{
+		DXGI_SWAP_CHAIN_DESC gswapChainDesc{
+
+		};
+
 		LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	}
 

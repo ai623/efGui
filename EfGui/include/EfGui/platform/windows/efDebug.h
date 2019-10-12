@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <string>
 
+#include <crtdbg.h>
+
 namespace efgui {
 	struct EfDebug {
 		EfDebug() = default;
@@ -17,4 +19,5 @@ namespace efgui {
 	void efDebugMsg(const std::string& msg);
 	void efDebugError(const std::string& msg);
 	void efDebugError(const std::string& msg, uint64_t errorCode);
+	inline bool efHasMemoryLeaks(){return _CrtDumpMemoryLeaks();}
 }

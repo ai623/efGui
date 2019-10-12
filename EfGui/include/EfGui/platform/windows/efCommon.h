@@ -11,6 +11,10 @@
 
 #define _EfGui_Release_Comptr(p)			if(p){p->Release();}
 #define _EfGui_Release_Comptr_To_Null(p)	if(p) {p->Release(); p=nullptr;}
+#define _EfGui_AddRef_Comptr(p)				if(p) {p->AddRef();}
+#define _EfGui_Copy_Comptr(x,p)				this->p = x.p; _EfGui_AddRef_Comptr(x.p)
+#define _EfGui_Move_Comptr(x,p)				this->p = x.p; x.p=nullptr
+
 
 namespace efgui 
 {

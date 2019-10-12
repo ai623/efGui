@@ -1,5 +1,11 @@
 #include "efPainter.h"
 
+#define _RPN(p)		_EfGui_Release_Comptr_To_Null(p)
+#define _REL(p)		_EfGui_Release_Comptr(p)
+#define _CPP(x,p)	_EfGui_Copy_Comptr(x,p)
+#define _MVP(x,p)	_EfGui_Move_Comptr(x,p)
+
+
 namespace efgui 
 {
 	EfPainterInit efPainterInit;
@@ -19,6 +25,12 @@ namespace efgui
 			return -1;
 		}
 		return 0;
+	}
+
+	void EfPainterInit::uninit()
+	{
+		using _efPainter::gdxgiFactory;
+		_EfGui_Release_Comptr_To_Null(gdxgiFactory);
 	}
 
 	bool EfAdapter::_init(UINT index)
@@ -75,4 +87,26 @@ namespace efgui
 		return true;
 	}
 
+	IDXGIFactory* EfPainter::createIDXGIFactory() const
+	{
+		HRESULT hr;
+		IDXGIDevice* dxgiDevice;
+		IDXGIAdapter* adaptor;
+		IDXGIFactory* factory;
+
+		hr = mdevice->QueryInterface(IID_PPV_ARGS(&dxgiDevice));
+		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfPainter: Fail to createIDXGIFactory", hr); _REL(dxgiDevice); }
+		hr = dxgiDevice->GetParent(IID_PPV_ARGS(&adaptor));
+		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfPainter: Fail to createIDXGIFactory", hr); _REL(dxgiDevice); _REL(adaptor); }
+		hr = adaptor->GetParent(IID_PPV_ARGS(&factory));
+		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfPainter: Fail to createIDXGIFactory", hr); _REL(dxgiDevice); _REL(adaptor);  _RPN(factory);}
+		return factory;
+	}
+
 }
+
+
+#undef	_RPN
+#undef	_REL
+#undef	_CPP
+#undef	_MVP

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="efGCObj.h" />
     <ClInclude Include="include\EfGui\common\efCommon.h" />
     <ClInclude Include="include\EfGui\platform\windows\efCommon.h" />
     <ClInclude Include="include\EfGui\platform\windows\efDebug.h" />

@@ -13,10 +13,21 @@ private:
 };
 
 int efMain() {
+
+	efGuiInit.enableDebugMode();
 	auto re = efGuiInit();
 	
 	MyWindow wnd;
-	EfPainter pt;
+
+	EfPainter pt1;
+	EfPainter pt2;
+	for(int i =0; i<1000;i++)
+	{
+		pt1 = pt2;
+		pt2 = pt2;
+		pt2 = pt1;
+	}
+
 
 	efExec();
 	return 0;

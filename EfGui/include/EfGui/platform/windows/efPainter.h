@@ -12,6 +12,8 @@
 
 
 #define _REL(p)		_EfGui_Release_Comptr(p)
+#define _CPP(x,p)	_EfGui_Copy_Comptr(x,p)
+#define _MVP(x,p)	_EfGui_Move_Comptr(x,p)
 
 namespace efgui 
 {
@@ -22,6 +24,7 @@ namespace efgui
 	struct EfPainterInit 
 	{
 		EfResult operator()(bool debugMode, bool multiThread);
+		void uninit();
 	};
 
 	extern EfPainterInit efPainterInit;
@@ -39,6 +42,9 @@ namespace efgui
 		void _uninit() { _del(); _reset(); }
 		void _del() { _REL(madapter); }
 		void _reset() { madapter = nullptr; }
+		void _copy(const EfAdapter& adapter) { _del(); _CPP(adapter, madapter); }
+		void _move(EfAdapter&& adapter) { _del(); _MVP(adapter, madapter); }
+
 		friend struct EfPainter;
 	};
 
@@ -47,6 +53,12 @@ namespace efgui
 		~EfPainter() { _del(); }
 		EfPainter(EfNoInit){}
 		EfPainter() { _init(nullptr, _efPainter::gdebugMode); }
+		EfPainter(const EfPainter& pt) { _copy(pt); }
+		EfPainter(EfPainter&& pt) { _move(std::move(pt)); }
+
+		EfPainter& operator = (const EfPainter& pt) { _copy(pt); return *this; }
+		EfPainter& operator = (EfPainter&& pt) { _move(std::move(pt)); return *this; }
+
 	private:
 		ID3D11Device* mdevice = nullptr;
 		ID3D11DeviceContext* mcontext = nullptr;
@@ -56,11 +68,15 @@ namespace efgui
 		void _uninit() { _del(); _reset(); }
 		void _del() { _REL(mdevice); _REL(mcontext); }
 		void _reset() { mdevice = nullptr; mcontext = nullptr; }
+		void _copy(const EfPainter& pt) { _del(); _CPP(pt, mdevice); _CPP(pt, mcontext); mlevel = pt.mlevel; }
+		void _move(EfPainter&& pt) { _del(); _MVP(pt, mdevice); _MVP(pt, mcontext); mlevel = pt.mlevel;}
 
 	public:
 		ID3D11Device* getDevice()const { return mdevice; }
 		ID3D11DeviceContext* getContext() const { return mcontext; }
 		D3D_FEATURE_LEVEL getLevel() const { return mlevel; }
+
+		IDXGIFactory* createIDXGIFactory() const;
 	};
 }
 
@@ -68,3 +84,5 @@ namespace efgui
 
 
 #undef	_REL
+#undef	_CPP
+#undef	_MVP

@@ -8,4 +8,5 @@ namespace efgui {
 		extern PWSTR gpCmdLine;
 		extern int gnCmdShow;
 	}
+	
 }
