@@ -1,5 +1,6 @@
 #pragma once
 #include <EfGui/common/efCommon.h>
+#include <EfGui/common/efShape.h>
 
 #include <stdint.h>
 
@@ -8,7 +9,7 @@
 
 #include "efCommon.h"
 #include "efPainter.h"
-
+#
 #define _REL(p) _EfGui_Release_Comptr(p)
 
 namespace efgui 
@@ -52,14 +53,22 @@ namespace efgui
 		virtual ~EfWindow() { _del(); }
 		//constructor
 		EfWindow(EfNoInit){}
+		EfWindow(EfPainter& pt) { _init(pt); }
 		EfWindow(){ _init(); }
 		//init
 		bool init() { _del(); return _init(); }
+		bool init(EfPainter& pt) { _del(); return _init(pt); }
 		void uninit() { _uninit(); }
 		//checker
+		bool isFullScreen() const;
 		//getter
+		EfRect<int> getRect() const;
 		EfPainter& getPainter() { return mpainter; }
 		int getWindowsNum() const;
+		//setter
+		void setPainter(const EfPainter& pt) { mpainter = pt; }
+		//others
+		
 		//callback
 		virtual void whenCreate() {}			//Caution: when construct, the son's virtual methods not initialized!
 		virtual void whenDestroy() {}			//Caution: when destruct virtual methods have been destroyed!
@@ -73,6 +82,7 @@ namespace efgui
 		EfPainter mpainter = EfPainter(EfNoInit());
 
 		bool _init(bool fullScreen = false) { EfPainter pt; return _init(pt, fullScreen, _efPainter::gsampleCount); }
+		bool _init(EfPainter& painter, bool fullScreen = false) { return _init(painter, fullScreen, _efPainter::gsampleCount); }
 		bool _init(EfPainter& painter, bool fullScreen, int sampleCount);
 		void _uninit() { _del(); _reset(); }
 		void _del();
@@ -84,6 +94,10 @@ namespace efgui
 		bool _initD3dComponents(DXGI_SWAP_CHAIN_DESC& desc);
 	public:
 		HWND getHWnd() const { return mhWnd; }
+		IDXGISwapChain* getSwapChain() const { return mswapChain; }
+		ID3D11Texture2D* getBackBuffer()const { return mbackBuffer; }
+		ID3D11RenderTargetView* getTargetView() const { return mtargetView; }
+		bool getSwapChainDesc(DXGI_SWAP_CHAIN_DESC& desc)const { if (mswapChain) { mswapChain->GetDesc(&desc); }return false; }
 
 		friend LRESULT _efWindow::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	};

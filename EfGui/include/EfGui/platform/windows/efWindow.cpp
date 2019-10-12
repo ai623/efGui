@@ -49,6 +49,23 @@ namespace efgui {
 
 	EfWindowInit efWindowInit;
 
+	bool EfWindow::isFullScreen() const
+	{
+		if (mswapChain) {
+			DXGI_SWAP_CHAIN_DESC desc;
+			mswapChain->GetDesc(&desc);
+			return !desc.Windowed;
+		}
+		return false;
+	}
+
+	EfRect<int> EfWindow::getRect() const
+	{
+		RECT rect;
+		GetClientRect(mhWnd, &rect);
+		return EfRect<int>{rect.bottom - rect.top, rect.right - rect.left};
+	}
+
 	int EfWindow::getWindowsNum() const
 	{
 		return _efWindow::gwndNum;
@@ -164,6 +181,9 @@ namespace efgui {
 		factory->Release();
 		return true;
 	}
+
+
+	
 
 	EfResult EfWindowInit::operator()()
 	{

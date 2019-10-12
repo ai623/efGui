@@ -15,29 +15,32 @@
 #define _CPP(x,p)	_EfGui_Copy_Comptr(x,p)
 #define _MVP(x,p)	_EfGui_Move_Comptr(x,p)
 
-namespace efgui 
+namespace efgui
 {
 	namespace _efPainter {
 		extern bool gdebugMode;
 		extern UINT gsampleCount;
 	}
 
-	struct EfPainterInit 
+	struct EfPainterInit
 	{
-		EfResult operator()(bool debugMode, bool multiThread,UINT sampleCount);
+		EfResult operator()(bool debugMode, bool multiThread, UINT sampleCount);
 
 		void uninit();
 	};
 
 	extern EfPainterInit efPainterInit;
 
+
 	struct EfAdapter
 	{
 		~EfAdapter() { _del(); }
-		EfAdapter(EfNoInit){}
+		EfAdapter(EfNoInit) {}
 		EfAdapter(UINT index = 0) { _init(index); }
 		bool init(UINT index = 0) { _del(); _init(index); }
 		void uninit() { _uninit(); }
+
+
 	private:
 		IDXGIAdapter* madapter = nullptr;
 
@@ -52,11 +55,11 @@ namespace efgui
 		friend struct EfAdapterOutput;
 	};
 
-	struct EfAdapterOutput 
+	struct EfAdapterOutput
 	{
 		~EfAdapterOutput() { _del(); }
 		EfAdapterOutput(EfNoInit) {}
-		EfAdapterOutput(const EfAdapter& adp, UINT index = 0) { _init(adp.madapter,index); }
+		EfAdapterOutput(const EfAdapter& adp, UINT index = 0) { _init(adp.madapter, index); }
 
 		bool init(const EfAdapter& adp, UINT index) { _del(); return _init(adp.madapter, index); }
 		void uninit() { _uninit(); }
@@ -69,13 +72,15 @@ namespace efgui
 		void _reset() { moutput = nullptr; }
 
 	public:
-		
+
 	};
 
-	struct EfPainter 
+	struct EfWindow;
+
+	struct EfPainter
 	{
 		~EfPainter() { _del(); }
-		EfPainter(EfNoInit){}
+		EfPainter(EfNoInit) {}
 		EfPainter() { _init(nullptr, _efPainter::gdebugMode); }
 		EfPainter(const EfPainter& pt) { _copy(pt); }
 		EfPainter(EfPainter&& pt) { _move(std::move(pt)); }
@@ -85,6 +90,9 @@ namespace efgui
 
 		bool init() { _del(); return _init(nullptr, _efPainter::gdebugMode); }
 		void uninit() { _uninit(); }
+
+		//void setRenderTarget(EfWindow& wnd, EfDepthStencilBuffer& dsBuff) {}
+		void setRenderTarget(EfWindow& wnd);
 	private:
 		ID3D11Device* mdevice = nullptr;
 		ID3D11DeviceContext* mcontext = nullptr;
@@ -95,7 +103,7 @@ namespace efgui
 		void _del() { _REL(mdevice); _REL(mcontext); }
 		void _reset() { mdevice = nullptr; mcontext = nullptr; }
 		void _copy(const EfPainter& pt) { _del(); _CPP(pt, mdevice); _CPP(pt, mcontext); mlevel = pt.mlevel; }
-		void _move(EfPainter&& pt) { _del(); _MVP(pt, mdevice); _MVP(pt, mcontext); mlevel = pt.mlevel;}
+		void _move(EfPainter&& pt) { _del(); _MVP(pt, mdevice); _MVP(pt, mcontext); mlevel = pt.mlevel; }
 
 	public:
 		ID3D11Device* getDevice()const { return mdevice; }
@@ -103,7 +111,26 @@ namespace efgui
 		D3D_FEATURE_LEVEL getLevel() const { return mlevel; }
 
 		IDXGIFactory* createIDXGIFactory() const;
+		ID3D11Texture2D* createDSTextureForWnd(const EfWindow& wnd)const;
 	};
+
+
+	struct EfPainterSetterDesc 
+	{
+		bool hasSetRenderTarget = false;
+	};
+
+	struct EfPainterSetter 
+	{
+		virtual ~EfPainterSetter() {}
+		virtual bool init(EfPainter& pt) = 0;
+		virtual void uninit() = 0;
+		virtual bool get(EfPainterSetterDesc& desc) = 0;
+		virtual bool backUp(EfPainterSetter& setter) = 0;
+		virtual bool set(EfPainter& pt) = 0;
+	};
+
+
 }
 
 

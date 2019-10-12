@@ -1,4 +1,5 @@
 #include "efPainter.h"
+#include "efWindow.h"
 
 #define _RPN(p)		_EfGui_Release_Comptr_To_Null(p)
 #define _REL(p)		_EfGui_Release_Comptr(p)
@@ -49,6 +50,11 @@ namespace efgui
 			return false;
 		}
 		return true;
+	}
+
+	void EfPainter::setRenderTarget(EfWindow& wnd)
+	{
+		auto view = wnd.getTargetView();  mcontext->OMSetRenderTargets(1, &view, nullptr); 
 	}
 
 	bool EfPainter::_init(IDXGIAdapter* adapter, bool debugMode)
@@ -108,6 +114,28 @@ namespace efgui
 		dxgiDevice->Release();
 		adaptor->Release();
 		return factory;
+	}
+
+	ID3D11Texture2D* EfPainter::createDSTextureForWnd(const EfWindow& wnd) const
+	{
+		ID3D11Texture2D* dsBuff;
+		HRESULT hr;
+		D3D11_TEXTURE2D_DESC desc;
+		auto backBuff = wnd.getBackBuffer();
+		backBuff->GetDesc(&desc);
+
+		desc.MipLevels = 1;
+		desc.ArraySize = 1;
+
+		desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		desc.Usage = D3D11_USAGE_DEFAULT;
+		desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+		desc.CPUAccessFlags = 0;
+		desc.MiscFlags = 0;
+
+		hr = mdevice->CreateTexture2D(&desc, nullptr, &dsBuff);
+		if (FAILED(hr))_EfGui_Debug_Warning_Msg_Code("EfPainter: Fail to createDSTextureForWnd", hr);
+		return dsBuff;
 	}
 
 	bool EfAdapterOutput::_init(IDXGIAdapter* apt, UINT index)

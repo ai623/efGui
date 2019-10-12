@@ -3,7 +3,10 @@
 using namespace efgui;
 struct MyWindow : EfWindow {
 	~MyWindow() { _uninit(); }
-	void whenDestroy() {
+
+	MyWindow(EfPainter& pt):EfWindow(pt){}
+
+	virtual void whenDestroy() {
 		_uninit();
 	}
 
@@ -16,10 +19,9 @@ int efMain() {
 
 	efGuiInit.enableDebugMode();
 	auto re = efGuiInit();
-	int count = 0;
 
-	MyWindow wnd;
-
+	EfPainter pt;
+	MyWindow wnd(pt);
 
 	efExec();
 	return 0;
