@@ -62,9 +62,10 @@ namespace efgui
 		//checker
 		bool isFullScreen() const;
 		//getter
-		EfRect<int> getRect() const;
+		EfRect<long> getRect() const;
 		EfPainter& getPainter() { return mpainter; }
 		int getWindowsNum() const;
+		EfPoint<long> getMousePosition() const;
 		//setter
 		void setPainter(const EfPainter& pt) { mpainter = pt; }
 		//others
@@ -73,6 +74,10 @@ namespace efgui
 		virtual void whenCreate() {}			//Caution: when construct, the son's virtual methods not initialized!
 		virtual void whenDestroy() {}			//Caution: when destruct virtual methods have been destroyed!
 		virtual void whenPaint() {}
+		virtual void whenMouseMove(EfPoint<long>& pos) {}
+		virtual void whenMouseWheel(WPARAM distance) {}
+		virtual void whenKeyDown(WPARAM key) {}
+		virtual void whenKeyUp(WPARAM key){}
 		//virtual EfWindow* clone();			//TODO
 	private:
 		HWND mhWnd = NULL;

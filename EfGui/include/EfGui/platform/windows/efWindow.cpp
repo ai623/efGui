@@ -15,32 +15,58 @@ namespace efgui {
 			//using efgui::EfWindow;
 			//using efgui::_efWindow::gwndNum;
 			EfWindow* wnd = (EfWindow*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
-			switch (msg)
-			{
-			case WM_PAINT:
-			{
-				wnd->whenPaint();
-				break;
+			if (wnd == nullptr) {
+				if (msg == WM_CREATE) {
+					wnd = (EfWindow*)(((CREATESTRUCT*)lParam)->lpCreateParams);
+					SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)wnd);
+					wnd->mhWnd = hWnd;
+					gwndNum++;
+					wnd->whenCreate();
+					return 0;
+				}
 			}
-			case WM_CREATE:
-			{
-				wnd = (EfWindow*)(((CREATESTRUCT*)lParam)->lpCreateParams);
-				SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)wnd);
-				wnd->mhWnd = hWnd;
-				gwndNum++;
-				wnd->whenCreate();
-				return 0;
-			}
-			case WM_DESTROY:
-			{
-				wnd->whenDestroy();
-				//wnd->releaseAll();
-				wnd->mhWnd = NULL;
-				gwndNum--;
-				return 0;
-			}
-			default:
-				break;
+			else {
+				switch (msg)
+				{
+				case WM_PAINT:
+				{
+					wnd->whenPaint();
+					break;
+				}
+				case WM_DESTROY:
+				{
+					wnd->whenDestroy();
+					//wnd->releaseAll();
+					wnd->mhWnd = NULL;
+					gwndNum--;
+					return 0;
+				}
+				case WM_MOUSEMOVE:
+				{
+					EfPoint<long> pos;
+					pos.x = LOWORD(lParam);
+					pos.y = HIWORD(lParam);
+					wnd->whenMouseMove(pos);
+					break;
+				}
+				case WM_MOUSEWHEEL:
+				{
+					wnd->whenMouseWheel(HIWORD(wParam));
+					break;
+				}
+				case WM_KEYDOWN:
+				{
+					wnd->whenKeyDown(wParam);
+					break;
+				}
+				case WM_KEYUP:
+				{
+					wnd->whenKeyUp(wParam);
+					break;
+				}
+				default:
+					break;
+				}
 			}
 
 			return DefWindowProc(hWnd, msg, wParam, lParam);
@@ -59,16 +85,24 @@ namespace efgui {
 		return false;
 	}
 
-	EfRect<int> EfWindow::getRect() const
+	EfRect<long> EfWindow::getRect() const
 	{
 		RECT rect;
 		GetClientRect(mhWnd, &rect);
-		return EfRect<int>{rect.bottom - rect.top, rect.right - rect.left};
+		return EfRect<long>{rect.bottom - rect.top, rect.right - rect.left};
 	}
 
 	int EfWindow::getWindowsNum() const
 	{
 		return _efWindow::gwndNum;
+	}
+
+	EfPoint<long> EfWindow::getMousePosition() const
+	{
+		
+		POINT pt;
+		ScreenToClient(mhWnd, &pt);
+		return EfPoint<long>{pt.x, pt.y};
 	}
 
 	bool EfWindow::_init(EfPainter& painter, bool fullScreen, int sampleCount)

@@ -135,6 +135,7 @@ namespace efgui
 		virtual void uninit() = 0;
 		virtual bool get(EfPainterControlDesc& desc) = 0;
 		virtual bool backup(EfPainterControl& control) = 0;
+		//virtual bool setData() = 0;
 		virtual bool set(EfPainter& painter, EfRenderTarget& target) = 0;
 		//virtual bool draw() = 0;
 	};
