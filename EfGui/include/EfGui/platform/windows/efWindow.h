@@ -47,7 +47,7 @@ namespace efgui
 		EfResult operator() ();
 	};
 
-	struct EfWindow 
+	struct EfWindow : EfRenderTarget
 	{
 		//destructor
 		virtual ~EfWindow() { _del(); }
@@ -97,6 +97,7 @@ namespace efgui
 		IDXGISwapChain* getSwapChain() const { return mswapChain; }
 		ID3D11Texture2D* getBackBuffer()const { return mbackBuffer; }
 		ID3D11RenderTargetView* getTargetView() const { return mtargetView; }
+		virtual void getTextureDesc(D3D11_TEXTURE2D_DESC& desc) const { if (mbackBuffer) { mbackBuffer->GetDesc(&desc); } }
 		bool getSwapChainDesc(DXGI_SWAP_CHAIN_DESC& desc)const { if (mswapChain) { mswapChain->GetDesc(&desc); }return false; }
 
 		friend LRESULT _efWindow::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include <string>
 #include "efDebug.h"
 
 #define _EfGui_Debug_Msg(msg)						efDebugMsg(msg)
@@ -23,5 +24,6 @@ namespace efgui
 		
 	}
 
+	std::wstring getCurrentPath();
 }
 

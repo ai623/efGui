@@ -22,6 +22,12 @@
     <Filter Include="源文件\windows">
       <UniqueIdentifier>{678834c2-09f5-49a7-bb0a-17ad1fb5da8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\test">
+      <UniqueIdentifier>{7b21444b-4fe9-427a-b5a6-afa324466c7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{ef99e6b3-4d9f-4123-ac8a-4717f51e5066}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\EfGui\common\efCommon.h">
@@ -60,9 +66,6 @@
     <ClInclude Include="include\EfGui\platform\windows\efSystem.h">
       <Filter>头文件\windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\EfGui\platform\windows\efPainterBuffer.h">
-      <Filter>头文件\windows</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test\platform\testWindow.cpp">
@@ -89,5 +92,13 @@
     <ClCompile Include="include\EfGui\platform\windows\efPainter.cpp">
       <Filter>源文件\windows</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="include\EfGui\platform\windows\shaders\VertexShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="include\EfGui\platform\windows\shaders\PixelShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

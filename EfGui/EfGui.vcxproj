@@ -28,7 +28,6 @@
     <ClInclude Include="include\EfGui\platform\windows\efExec.h" />
     <ClInclude Include="include\EfGui\platform\windows\efGui.h" />
     <ClInclude Include="include\EfGui\platform\windows\efPainter.h" />
-    <ClInclude Include="include\EfGui\platform\windows\efPainterBuffer.h" />
     <ClInclude Include="include\EfGui\platform\windows\efSystem.h" />
     <ClInclude Include="include\EfGui\platform\windows\efWindow.h" />
     <ClInclude Include="include\EfGui\platform\windows\efMain.h" />
@@ -42,6 +41,20 @@
     <ClCompile Include="include\EfGui\platform\windows\efWindow.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efMain.cpp" />
     <ClCompile Include="test\platform\testWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="include\EfGui\platform\windows\shaders\PixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="include\EfGui\platform\windows\shaders\VertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

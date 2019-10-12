@@ -77,6 +77,13 @@ namespace efgui
 
 	struct EfWindow;
 
+	struct EfRenderTarget 
+	{
+		//virtual ID3D11RenderTargetView* createTargetView() const = 0;
+		virtual void getTextureDesc(D3D11_TEXTURE2D_DESC& desc) const = 0;
+		virtual ID3D11RenderTargetView* getTargetView()const = 0;
+	};
+
 	struct EfPainter
 	{
 		~EfPainter() { _del(); }
@@ -114,23 +121,23 @@ namespace efgui
 		ID3D11Texture2D* createDSTextureForWnd(const EfWindow& wnd)const;
 	};
 
-
-	struct EfPainterSetterDesc 
+	struct EfPainterControlDesc 
 	{
 		bool hasSetRenderTarget = false;
 	};
 
-	struct EfPainterSetter 
+	struct EfPainterControl 
 	{
-		virtual ~EfPainterSetter() {}
-		virtual bool init(EfPainter& pt) = 0;
+		virtual ~EfPainterControl() {}
+		virtual bool init(const EfPainter& pt, EfRenderTarget& target) = 0;
+		virtual bool initPartial(const EfPainter& pt) = 0;
+		virtual bool initPartial(EfRenderTarget& target) = 0;
 		virtual void uninit() = 0;
-		virtual bool get(EfPainterSetterDesc& desc) = 0;
-		virtual bool backUp(EfPainterSetter& setter) = 0;
-		virtual bool set(EfPainter& pt) = 0;
+		virtual bool get(EfPainterControlDesc& desc) = 0;
+		virtual bool backup(EfPainterControl& control) = 0;
+		virtual bool set(EfPainter& painter, EfRenderTarget& target) = 0;
+		//virtual bool draw() = 0;
 	};
-
-
 }
 
 

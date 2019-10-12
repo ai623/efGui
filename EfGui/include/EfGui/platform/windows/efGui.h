@@ -1,4 +1,5 @@
 #pragma once
+#include "efCommon.h"
 #include "efExec.h"
 #include "efWindow.h"
 #include "efPainter.h"
