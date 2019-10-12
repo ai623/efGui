@@ -15,11 +15,15 @@ namespace efgui
 		void enableMutiThread() { mmultiThread = true; }
 		void disableMutiThread() { mmultiThread = false; }
 
+		void setSampleCount(UINT count) { msampleCount = count; }
+		void disableMultiSample() { msampleCount = 1; }
+
 		void uninit();
 
 	private:
 		bool mdebugMode = false;
 		bool mmultiThread = false;
+		UINT msampleCount = 1;
 	};
 
 	extern EfGuiInit efGuiInit;

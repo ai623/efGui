@@ -48,8 +48,17 @@
     <ClInclude Include="include\EfGui\platform\windows\efPainter.h">
       <Filter>头文件\windows</Filter>
     </ClInclude>
-    <ClInclude Include="efGCObj.h">
+    <ClInclude Include="efShape.h">
+      <Filter>头文件\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EfGui\common\efGCObj.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EfGui\common\efShape.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\efSystem.h">
+      <Filter>头文件\windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

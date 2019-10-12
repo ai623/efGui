@@ -1,14 +1,14 @@
 #include "efWindow.h"
 #include "efMain.h"
+#include "efSystem.h"
 
-LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	
+
 namespace efgui {
+
 	namespace _efWindow 
 	{
 		const wchar_t gwcName[] = L"BaseWindow";
 		int gwndNum = 0;
-
 
 		LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
@@ -54,7 +54,7 @@ namespace efgui {
 		return _efWindow::gwndNum;
 	}
 
-	bool EfWindow::_init()
+	bool EfWindow::_init(EfPainter& painter, bool fullScreen, int sampleCount)
 	{
 		using namespace _efWindow;
 		using namespace _innerUsed;
@@ -72,9 +72,80 @@ namespace efgui {
 			ghInstance,  // Instance handle
 			this        // Additional application data
 		);
-		if (mhWnd) {
+		if (!mhWnd) {
 			return false;
 		}
+		mpainter = painter;
+		if (_initD3dComponents(fullScreen, sampleCount)) {
+			InvalidateRect(mhWnd, NULL, FALSE);	//post WM_PAINT message
+			return true;
+		}
+		else {
+			mpainter.uninit();
+			return false;
+		}
+	}
+
+	bool EfWindow::_initD3dComponents(bool fullScreen, int sampleCount)
+	{
+		HRESULT hr;
+
+		DXGI_SWAP_CHAIN_DESC scDesc;
+		auto& bfDesc = scDesc.BufferDesc;
+		if (fullScreen) {
+			auto rect = efGetSysResolution();
+			bfDesc.Width = rect.width;
+			bfDesc.Height = rect.height;
+			scDesc.Windowed = FALSE;
+		}
+		else {
+			bfDesc.Width = 0;
+			bfDesc.Height = 0;
+			scDesc.Windowed = TRUE;
+		}
+		bfDesc.RefreshRate = DXGI_RATIONAL{};
+		bfDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		bfDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+		bfDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+
+		scDesc.SampleDesc.Count = sampleCount;
+		if (sampleCount != 1) {
+			UINT qualityLevleNum;
+			hr = mpainter.getDevice()->CheckMultisampleQualityLevels(bfDesc.Format, sampleCount, &qualityLevleNum);
+			if (FAILED(hr)) {
+				_EfGui_Debug_Warning_Msg_Code("EfWindow: Fail to get multi-sample quality.", hr);
+				scDesc.SampleDesc.Quality = 0;
+			}
+			else {
+				scDesc.SampleDesc.Quality = qualityLevleNum - 1;
+			}
+		}
+		else {
+			scDesc.SampleDesc.Quality = 0;
+		}
+		scDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		scDesc.BufferCount = 1;
+		scDesc.OutputWindow = mhWnd;
+		scDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+		scDesc.Flags = 0;
+
+		return _initD3dComponents(scDesc);
+	}
+
+	bool EfWindow::_initD3dComponents(DXGI_SWAP_CHAIN_DESC& desc)
+	{
+		HRESULT hr;
+		auto factory = mpainter.createIDXGIFactory();
+		if (factory == nullptr) {
+			return false;
+		}
+		hr = factory->CreateSwapChain(mpainter.getDevice(), &desc, &mswapChain);
+		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfWindow: Fail to create SwapChain", hr); factory->Release(); return false; }
+		hr = mswapChain->GetBuffer(0, IID_PPV_ARGS(&mbackBuffer));
+		if (FAILED(hr)) {_EfGui_Debug_Warning_Msg_Code("EfWindow: Fail to get back buffer.", hr); factory->Release(); mswapChain->Release(); return false;}
+		hr = mpainter.getDevice()->CreateRenderTargetView(mbackBuffer, nullptr, &mtargetView);
+		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfWindow: Fail to create render target view.", hr); factory->Release(); mswapChain->Release(); mbackBuffer->Release(); return false; }
+		factory->Release();
 		return true;
 	}
 

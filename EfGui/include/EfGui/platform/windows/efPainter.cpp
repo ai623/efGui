@@ -14,16 +14,22 @@ namespace efgui
 		IDXGIFactory* gdxgiFactory = nullptr;
 		bool gmultiThread = false;
 		bool gdebugMode = false;
+		UINT gsampleCount = 1;
 	}
 
-	EfResult EfPainterInit::operator()(bool debugMode, bool multiThread)
+	EfResult EfPainterInit::operator()(bool debugMode, bool multiThread,UINT sampleCount)
 	{
+		using namespace _efPainter;
 		HRESULT hr;
-		hr = CreateDXGIFactory(IID_PPV_ARGS(&_efPainter::gdxgiFactory));
+		hr = CreateDXGIFactory(IID_PPV_ARGS(&gdxgiFactory));
 		if (FAILED(hr)) {
 			_EfGui_Debug_Warning_Msg_Code("EfPainterInit: Fail to create IDXGIFactory", hr);
 			return -1;
 		}
+		gdebugMode = debugMode;
+		gmultiThread = multiThread;
+		gsampleCount = sampleCount;
+		
 		return 0;
 	}
 
@@ -48,7 +54,6 @@ namespace efgui
 	bool EfPainter::_init(IDXGIAdapter* adapter, bool debugMode)
 	{
 		HRESULT hr;
-		_del();
 
 		UINT flags{};
 		if (!_efPainter::gmultiThread) {
@@ -95,12 +100,22 @@ namespace efgui
 		IDXGIFactory* factory;
 
 		hr = mdevice->QueryInterface(IID_PPV_ARGS(&dxgiDevice));
-		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfPainter: Fail to createIDXGIFactory", hr); _REL(dxgiDevice); }
+		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfPainter: Fail to createIDXGIFactory", hr); _REL(dxgiDevice); return nullptr; }
 		hr = dxgiDevice->GetParent(IID_PPV_ARGS(&adaptor));
-		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfPainter: Fail to createIDXGIFactory", hr); _REL(dxgiDevice); _REL(adaptor); }
+		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfPainter: Fail to createIDXGIFactory", hr); _REL(dxgiDevice); _REL(adaptor); return nullptr; }
 		hr = adaptor->GetParent(IID_PPV_ARGS(&factory));
-		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfPainter: Fail to createIDXGIFactory", hr); _REL(dxgiDevice); _REL(adaptor);  _RPN(factory);}
+		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfPainter: Fail to createIDXGIFactory", hr); _REL(dxgiDevice); _REL(adaptor);  _REL(factory); return nullptr; }
+		dxgiDevice->Release();
+		adaptor->Release();
 		return factory;
+	}
+
+	bool EfAdapterOutput::_init(IDXGIAdapter* apt, UINT index)
+	{
+		HRESULT hr;
+		hr = apt->EnumOutputs(index, &moutput);
+		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfAdapterOutput: Fail to init", hr); return false; }
+		return true;
 	}
 
 }

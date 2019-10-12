@@ -10,7 +10,7 @@ namespace efgui
 		EfResult re;
 		re = efWindowInit();
 		if (re)return re;
-		re = efPainterInit(mdebugMode, mmultiThread);
+		re = efPainterInit(mdebugMode, mmultiThread,msampleCount);
 		if (re) return re;
 		return re;
 	}

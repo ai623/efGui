@@ -19,11 +19,13 @@ namespace efgui
 {
 	namespace _efPainter {
 		extern bool gdebugMode;
+		extern UINT gsampleCount;
 	}
 
 	struct EfPainterInit 
 	{
-		EfResult operator()(bool debugMode, bool multiThread);
+		EfResult operator()(bool debugMode, bool multiThread,UINT sampleCount);
+
 		void uninit();
 	};
 
@@ -35,6 +37,7 @@ namespace efgui
 		EfAdapter(EfNoInit){}
 		EfAdapter(UINT index = 0) { _init(index); }
 		bool init(UINT index = 0) { _del(); _init(index); }
+		void uninit() { _uninit(); }
 	private:
 		IDXGIAdapter* madapter = nullptr;
 
@@ -46,6 +49,27 @@ namespace efgui
 		void _move(EfAdapter&& adapter) { _del(); _MVP(adapter, madapter); }
 
 		friend struct EfPainter;
+		friend struct EfAdapterOutput;
+	};
+
+	struct EfAdapterOutput 
+	{
+		~EfAdapterOutput() { _del(); }
+		EfAdapterOutput(EfNoInit) {}
+		EfAdapterOutput(const EfAdapter& adp, UINT index = 0) { _init(adp.madapter,index); }
+
+		bool init(const EfAdapter& adp, UINT index) { _del(); return _init(adp.madapter, index); }
+		void uninit() { _uninit(); }
+	private:
+		IDXGIOutput* moutput = nullptr;
+
+		bool _init(IDXGIAdapter* apt, UINT index);
+		void _uninit() { _del(); _reset(); }
+		void _del() { _REL(moutput); }
+		void _reset() { moutput = nullptr; }
+
+	public:
+		
 	};
 
 	struct EfPainter 
@@ -59,6 +83,8 @@ namespace efgui
 		EfPainter& operator = (const EfPainter& pt) { _copy(pt); return *this; }
 		EfPainter& operator = (EfPainter&& pt) { _move(std::move(pt)); return *this; }
 
+		bool init() { _del(); return _init(nullptr, _efPainter::gdebugMode); }
+		void uninit() { _uninit(); }
 	private:
 		ID3D11Device* mdevice = nullptr;
 		ID3D11DeviceContext* mcontext = nullptr;
