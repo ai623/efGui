@@ -72,10 +72,10 @@ namespace efgui
 		ID3D11RenderTargetView* mtargetView = nullptr;
 		EfPainter mpainter = EfPainter(EfNoInit());
 
-		bool _init() { EfPainter pt; return _init(pt, false, _efPainter::gsampleCount); }
+		bool _init(bool fullScreen = false) { EfPainter pt; return _init(pt, fullScreen, _efPainter::gsampleCount); }
 		bool _init(EfPainter& painter, bool fullScreen, int sampleCount);
 		void _uninit() { _del(); _reset(); }
-		void _del() { if (mhWnd) { DestroyWindow(mhWnd); } _REL(mswapChain); _REL(mbackBuffer); _REL(mtargetView); mpainter.uninit();}
+		void _del();
 		void _reset() { mhWnd = NULL; mswapChain = nullptr; mbackBuffer = nullptr; mtargetView = nullptr; }
 		void _copy(const EfWindow&) = delete;
 		void _move(EfWindow&&) = delete;

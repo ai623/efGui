@@ -86,6 +86,22 @@ namespace efgui {
 		}
 	}
 
+	void EfWindow::_del()
+	{
+		if (mhWnd) { DestroyWindow(mhWnd); } 
+		if (mswapChain) {
+			DXGI_SWAP_CHAIN_DESC desc;
+			mswapChain->GetDesc(&desc);
+			if (desc.Windowed == FALSE) {
+				mswapChain->SetFullscreenState(FALSE, NULL);
+			}
+			mswapChain->Release();
+		}
+		_REL(mbackBuffer);
+		_REL(mtargetView);
+		mpainter.uninit();
+	}
+
 	bool EfWindow::_initD3dComponents(bool fullScreen, int sampleCount)
 	{
 		HRESULT hr;
@@ -103,7 +119,7 @@ namespace efgui {
 			bfDesc.Height = 0;
 			scDesc.Windowed = TRUE;
 		}
-		bfDesc.RefreshRate = DXGI_RATIONAL{};
+		bfDesc.RefreshRate = DXGI_RATIONAL{60,1};
 		bfDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		bfDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 		bfDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
