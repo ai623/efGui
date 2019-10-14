@@ -114,7 +114,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>D:\Bill\project\visual_studio\mylib\EfGui\EfGui\thirdParty\DirectXTK\Bin\Desktop_2019_Win10\x64\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\EfGui\thirdParty\DirectXTK\Bin\Desktop_2019_Win10\x64\Debug;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)\EfGui\include;$(IncludePath)</IncludePath>
     <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
