@@ -1,7 +1,15 @@
 #pragma once
+#include <type_traits>
+#include <array>
 
 namespace efgui 
 {
+
+	template<typename T, size_t Size>
+	struct EfVector : std::array<T, Size>{
+
+	};
+
 	template<typename T>
 	struct EfPoint {
 		T x;

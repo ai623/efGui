@@ -66,6 +66,15 @@
     <ClInclude Include="include\EfGui\platform\windows\efSystem.h">
       <Filter>头文件\windows</Filter>
     </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\efDSBuffCreator.h">
+      <Filter>头文件\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\efPainterManager.h">
+      <Filter>头文件\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\efPM2D.h">
+      <Filter>头文件\test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test\platform\testWindow.cpp">
@@ -92,12 +101,18 @@
     <ClCompile Include="include\EfGui\platform\windows\efPainter.cpp">
       <Filter>源文件\windows</Filter>
     </ClCompile>
+    <ClCompile Include="include\EfGui\platform\windows\EfDSBuffCreator.cpp">
+      <Filter>源文件\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="include\EfGui\platform\windows\efPM2D.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="include\EfGui\platform\windows\shaders\VertexShader.hlsl">
+    <FxCompile Include="include\EfGui\platform\windows\shaders\pixel\EfPMPolygonI.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="include\EfGui\platform\windows\shaders\PixelShader.hlsl">
+    <FxCompile Include="include\EfGui\platform\windows\shaders\vertex\EfPMPolygonV.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

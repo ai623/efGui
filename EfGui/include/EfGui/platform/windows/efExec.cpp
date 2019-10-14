@@ -18,8 +18,11 @@ namespace efgui
 				}
 				else
 				{
-					if (defaultRun) {
-						defaultRun();
+					if (mloop) {
+						mloop->loopFunc();
+					}
+					if (mloopFunc) {
+						mloopFunc();
 					}
 				}
 			}

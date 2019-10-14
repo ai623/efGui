@@ -1,6 +1,7 @@
 #include "efPainter.h"
 #include "efWindow.h"
 
+
 #define _RPN(p)		_EfGui_Release_Comptr_To_Null(p)
 #define _REL(p)		_EfGui_Release_Comptr(p)
 #define _CPP(x,p)	_EfGui_Copy_Comptr(x,p)
@@ -50,6 +51,11 @@ namespace efgui
 			return false;
 		}
 		return true;
+	}
+
+	void EfPainter::clearTarget(EfWindow& wnd,const Color& color) const
+	{
+		mcontext->ClearRenderTargetView(wnd.getTargetView(), color.data());
 	}
 
 	void EfPainter::setRenderTarget(EfWindow& wnd)
@@ -145,6 +151,7 @@ namespace efgui
 		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfAdapterOutput: Fail to init", hr); return false; }
 		return true;
 	}
+
 
 }
 

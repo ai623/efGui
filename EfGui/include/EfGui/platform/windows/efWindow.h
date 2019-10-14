@@ -9,7 +9,7 @@
 
 #include "efCommon.h"
 #include "efPainter.h"
-#
+#include "efPainterManager.h"
 #define _REL(p) _EfGui_Release_Comptr(p)
 
 namespace efgui 
@@ -47,7 +47,7 @@ namespace efgui
 		EfResult operator() ();
 	};
 
-	struct EfWindow : EfRenderTarget
+	struct EfWindow : EfTexture2D, EfRenderTarget
 	{
 		//destructor
 		virtual ~EfWindow() { _del(); }
@@ -67,17 +67,21 @@ namespace efgui
 		int getWindowsNum() const;
 		EfPoint<long> getMousePosition() const;
 		//setter
-		void setPainter(const EfPainter& pt) { mpainter = pt; }
+		//void setPainter(const EfPainter& pt) { mpainter = pt; }		//Problem Here!!!
 		//others
-		
+		void updateWindow()const { UpdateWindow(mhWnd); }
+		void updateWindowLater() const { InvalidateRect(mhWnd, NULL, FALSE); }
+		void present() { if(mswapChain) mswapChain->Present(0,0); }
 		//callback
 		virtual void whenCreate() {}			//Caution: when construct, the son's virtual methods not initialized!
 		virtual void whenDestroy() {}			//Caution: when destruct virtual methods have been destroyed!
 		virtual void whenPaint() {}
-		virtual void whenMouseMove(EfPoint<long>& pos) {}
+		virtual void whenSizeChange(EfRect<long>& rect) {}
+		virtual void whenMouseMove(EfPoint<long>& pos) { }
 		virtual void whenMouseWheel(WPARAM distance) {}
 		virtual void whenKeyDown(WPARAM key) {}
 		virtual void whenKeyUp(WPARAM key){}
+		virtual void whenChar(WPARAM code) {}
 		//virtual EfWindow* clone();			//TODO
 	private:
 		HWND mhWnd = NULL;
@@ -107,4 +111,8 @@ namespace efgui
 
 		friend LRESULT _efWindow::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	};
+	
+	inline void efUpdateAllWindow() {
+		InvalidateRect(NULL, NULL, FALSE);
+	}
 }

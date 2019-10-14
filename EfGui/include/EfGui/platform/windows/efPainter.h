@@ -8,6 +8,7 @@
 #include <string>
 
 #include "efCommon.h"
+#include <EfGui/common/efShape.h>
 
 
 
@@ -77,12 +78,7 @@ namespace efgui
 
 	struct EfWindow;
 
-	struct EfRenderTarget 
-	{
-		//virtual ID3D11RenderTargetView* createTargetView() const = 0;
-		virtual void getTextureDesc(D3D11_TEXTURE2D_DESC& desc) const = 0;
-		virtual ID3D11RenderTargetView* getTargetView()const = 0;
-	};
+
 
 	struct EfPainter
 	{
@@ -98,6 +94,8 @@ namespace efgui
 		bool init() { _del(); return _init(nullptr, _efPainter::gdebugMode); }
 		void uninit() { _uninit(); }
 
+		using Color = std::array<FLOAT, 4>;
+		void clearTarget(EfWindow& wnd, const Color& color) const;
 		//void setRenderTarget(EfWindow& wnd, EfDepthStencilBuffer& dsBuff) {}
 		void setRenderTarget(EfWindow& wnd);
 	private:
@@ -119,25 +117,6 @@ namespace efgui
 
 		IDXGIFactory* createIDXGIFactory() const;
 		ID3D11Texture2D* createDSTextureForWnd(const EfWindow& wnd)const;
-	};
-
-	struct EfPainterControlDesc 
-	{
-		bool hasSetRenderTarget = false;
-	};
-
-	struct EfPainterControl 
-	{
-		virtual ~EfPainterControl() {}
-		virtual bool init(const EfPainter& pt, EfRenderTarget& target) = 0;
-		virtual bool initPartial(const EfPainter& pt) = 0;
-		virtual bool initPartial(EfRenderTarget& target) = 0;
-		virtual void uninit() = 0;
-		virtual bool get(EfPainterControlDesc& desc) = 0;
-		virtual bool backup(EfPainterControl& control) = 0;
-		//virtual bool setData() = 0;
-		virtual bool set(EfPainter& painter, EfRenderTarget& target) = 0;
-		//virtual bool draw() = 0;
 	};
 }
 

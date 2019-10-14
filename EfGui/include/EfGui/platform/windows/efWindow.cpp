@@ -31,15 +31,15 @@ namespace efgui {
 				case WM_PAINT:
 				{
 					wnd->whenPaint();
-					break;
-				}
-				case WM_DESTROY:
-				{
-					wnd->whenDestroy();
-					//wnd->releaseAll();
-					wnd->mhWnd = NULL;
-					gwndNum--;
+					ValidateRect(wnd->getHWnd(), NULL);
 					return 0;
+				}
+				case WM_SIZE:
+				{
+					//wnd->whenSizeChange();
+					EfRect<long> rect{ LOWORD(lParam), HIWORD(lParam) };
+					wnd->whenSizeChange(rect);
+					break;
 				}
 				case WM_MOUSEMOVE:
 				{
@@ -63,6 +63,19 @@ namespace efgui {
 				{
 					wnd->whenKeyUp(wParam);
 					break;
+				}
+				case WM_CHAR:
+				{
+					wnd->whenChar(wParam);
+					break;
+				}
+				case WM_DESTROY:
+				{
+					wnd->whenDestroy();
+					//wnd->releaseAll();
+					wnd->mhWnd = NULL;
+					gwndNum--;
+					return 0;
 				}
 				default:
 					break;
@@ -89,7 +102,7 @@ namespace efgui {
 	{
 		RECT rect;
 		GetClientRect(mhWnd, &rect);
-		return EfRect<long>{rect.bottom - rect.top, rect.right - rect.left};
+		return EfRect<long>{ rect.right - rect.left,rect.bottom - rect.top};
 	}
 
 	int EfWindow::getWindowsNum() const
@@ -123,6 +136,7 @@ namespace efgui {
 			ghInstance,  // Instance handle
 			this        // Additional application data
 		);
+		auto debugRe = GetLastError();
 		if (!mhWnd) {
 			return false;
 		}
@@ -206,6 +220,7 @@ namespace efgui {
 		if (factory == nullptr) {
 			return false;
 		}
+	
 		hr = factory->CreateSwapChain(mpainter.getDevice(), &desc, &mswapChain);
 		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfWindow: Fail to create SwapChain", hr); factory->Release(); return false; }
 		hr = mswapChain->GetBuffer(0, IID_PPV_ARGS(&mbackBuffer));

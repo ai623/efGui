@@ -25,9 +25,12 @@
     <ClInclude Include="include\EfGui\common\efShape.h" />
     <ClInclude Include="include\EfGui\platform\windows\efCommon.h" />
     <ClInclude Include="include\EfGui\platform\windows\efDebug.h" />
+    <ClInclude Include="include\EfGui\platform\windows\efDSBuffCreator.h" />
     <ClInclude Include="include\EfGui\platform\windows\efExec.h" />
     <ClInclude Include="include\EfGui\platform\windows\efGui.h" />
     <ClInclude Include="include\EfGui\platform\windows\efPainter.h" />
+    <ClInclude Include="include\EfGui\platform\windows\efPainterManager.h" />
+    <ClInclude Include="include\EfGui\platform\windows\efPM2D.h" />
     <ClInclude Include="include\EfGui\platform\windows\efSystem.h" />
     <ClInclude Include="include\EfGui\platform\windows\efWindow.h" />
     <ClInclude Include="include\EfGui\platform\windows\efMain.h" />
@@ -35,21 +38,23 @@
   <ItemGroup>
     <ClCompile Include="include\EfGui\platform\windows\efCommon.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efDebug.cpp" />
+    <ClCompile Include="include\EfGui\platform\windows\EfDSBuffCreator.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efExec.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efGui.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efPainter.cpp" />
+    <ClCompile Include="include\EfGui\platform\windows\efPM2D.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efWindow.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efMain.cpp" />
     <ClCompile Include="test\platform\testWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="include\EfGui\platform\windows\shaders\PixelShader.hlsl">
+    <FxCompile Include="include\EfGui\platform\windows\shaders\pixel\EfPMPolygonI.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="include\EfGui\platform\windows\shaders\VertexShader.hlsl">
+    <FxCompile Include="include\EfGui\platform\windows\shaders\vertex\EfPMPolygonV.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
@@ -109,8 +114,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <LibraryPath>D:\Bill\project\visual_studio\mylib\EfGui\EfGui\thirdParty\DirectXTK\Bin\Desktop_2019_Win10\x64\Debug;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)\EfGui\include;$(IncludePath)</IncludePath>
+    <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -132,6 +138,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
