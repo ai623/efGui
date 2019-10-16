@@ -1,8 +1,9 @@
 #include <string>
 #include <cassert>
 #include <wrl/client.h>
+#include <DirectXMath.h>
+
 #include <EfGui/platform/windows/efGui.h>
-#include <EfGui/platform/windows/EfDSBuffCreator.h>
 
 #define ComPtr Microsoft::WRL::ComPtr
 
@@ -30,32 +31,54 @@ struct MyWindow : EfWindow, EfLoop
 		auto& pt = getPainter();
 		auto context = pt.getContext();
 		auto rect = getRect();
+
 		mclearColor[0] = (float)mmousePos.x / rect.width;
 		mclearColor[1] = (float)mmousePos.y / rect.height;
 
-		pt.clearTarget(*this, mclearColor);
+		context->ClearRenderTargetView(getTargetView(), mclearColor);
 		context->ClearDepthStencilView(mdsView.Get(), D3D11_CLEAR_DEPTH, 1., 0);
-		std::wstring str = L"Hello,World!";
 
 		present();
 	}
 
+	virtual void whenChar(WPARAM code) {
+
+	}
+	virtual void whenIME(WPARAM notify, LPARAM command)
+	{
+		if (0&&notify == WM_IME_STARTCOMPOSITION) {
+			auto imm = ImmGetContext(getHWnd());
+			COMPOSITIONFORM  form;
+			form.dwStyle = CFS_POINT;
+			form.ptCurrentPos.x = 0;
+			form.ptCurrentPos.y = 0;
+			ImmSetCompositionWindow(imm,&form);
+			ImmReleaseContext(getHWnd(), imm);
+		}
+
+	}
 private:
 	EfPoint<long> mmousePos;
-	std::array<float, 4> mclearColor{ 0,0,0,1 };
+	float mclearColor[4]{ 0,0,0,1 };
 	D3D11_VIEWPORT mvp;
-	EfDSBuffCreator mdsBuffCreator;
+
+	ComPtr<ID3D11Texture2D> mdsBuff;
 	ComPtr<ID3D11DepthStencilView> mdsView;
 
 	void _init() 
 	{
 		auto& painter = getPainter();
 		auto context = painter.getContext();
+		auto device = painter.getDevice();
 		auto rect = getRect();
-		mvp = {0,0,(float)rect.width,(float)rect.height,0.,1.};
 		auto targetView = getTargetView();
+
+		mvp = {0,0,(float)rect.width,(float)rect.height,0.,1.};
 		context->RSSetViewports(1, &mvp);
-		mdsView.Attach(mdsBuffCreator.create(getPainter(), *this));
+
+		mdsBuff.Attach(painter.createDSTextureForWnd(*this));
+		device->CreateDepthStencilView(mdsBuff.Get(), nullptr, &mdsView);
+
 		context->OMSetRenderTargets(1, &targetView, mdsView.Get());
 	}
 	void _uninit() { if (getWindowsNum() == 1) { efExec.quit(); } }

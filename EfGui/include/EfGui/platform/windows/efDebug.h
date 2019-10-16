@@ -3,6 +3,7 @@
 #include <string>
 
 #include <crtdbg.h>
+#include <Windows.h>
 
 namespace efgui {
 	struct EfDebug {
@@ -16,8 +17,26 @@ namespace efgui {
 		bool isOn = true;
 	};
 
+	struct EfErrorCatcher
+	{
+		inline void setHResult(HRESULT hResult)
+		{
+			mhResult = hResult;
+		}
+
+		inline HRESULT getHResult() {
+			return mhResult;
+		}
+
+	private:
+		HRESULT mhResult = 0;
+	};
+	extern EfErrorCatcher efErrorCatcher;
+
 	void efDebugMsg(const std::string& msg);
 	void efDebugError(const std::string& msg);
 	void efDebugError(const std::string& msg, uint64_t errorCode);
 	inline bool efHasMemoryLeaks(){return _CrtDumpMemoryLeaks();}
+
+
 }

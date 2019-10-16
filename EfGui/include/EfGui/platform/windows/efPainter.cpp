@@ -53,11 +53,6 @@ namespace efgui
 		return true;
 	}
 
-	void EfPainter::clearTarget(EfWindow& wnd,const Color& color) const
-	{
-		mcontext->ClearRenderTargetView(wnd.getTargetView(), color.data());
-	}
-
 	void EfPainter::setRenderTarget(EfWindow& wnd)
 	{
 		auto view = wnd.getTargetView();  mcontext->OMSetRenderTargets(1, &view, nullptr); 
@@ -143,6 +138,8 @@ namespace efgui
 		if (FAILED(hr))_EfGui_Debug_Warning_Msg_Code("EfPainter: Fail to createDSTextureForWnd", hr);
 		return dsBuff;
 	}
+
+
 
 	bool EfAdapterOutput::_init(IDXGIAdapter* apt, UINT index)
 	{

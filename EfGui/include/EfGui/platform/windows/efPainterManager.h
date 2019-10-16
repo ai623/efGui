@@ -2,7 +2,6 @@
 #include "efPainter.h"
 
 namespace efgui {
-
 	struct EfTexture2D
 	{
 		virtual void getTextureDesc(D3D11_TEXTURE2D_DESC& desc) const = 0;
@@ -27,16 +26,18 @@ namespace efgui {
 
 	//Manage painting data
 	//Manage drawing painting data 
+	//Manage stencil buffer
 	//Do not manage rendertarget
-	//Do not manage depthStencilbuffer
 	//Do not manage viewport
+	//Do not manage depth buffer
+	//draw() method may also set painter
 	struct EfPainterManager
 	{
 		virtual ~EfPainterManager() {}
 
 		//initiate data but not set painter context
 		//shared: share resource between different painters
-		virtual bool init(const EfPainter& pt, const D3D11_VIEWPORT& vp, bool shared = false) = 0;
+		virtual bool init(const EfPainter& pt, bool shared = false) = 0;
 
 		//release data
 		virtual void uninit() = 0;

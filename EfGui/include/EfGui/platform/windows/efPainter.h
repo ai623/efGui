@@ -10,11 +10,13 @@
 #include "efCommon.h"
 #include <EfGui/common/efShape.h>
 
-
+#undef near
+#undef far
 
 #define _REL(p)		_EfGui_Release_Comptr(p)
 #define _CPP(x,p)	_EfGui_Copy_Comptr(x,p)
 #define _MVP(x,p)	_EfGui_Move_Comptr(x,p)
+#define ReCatch(re) efErrorCatcher.setHResult(re)
 
 namespace efgui
 {
@@ -94,9 +96,6 @@ namespace efgui
 		bool init() { _del(); return _init(nullptr, _efPainter::gdebugMode); }
 		void uninit() { _uninit(); }
 
-		using Color = std::array<FLOAT, 4>;
-		void clearTarget(EfWindow& wnd, const Color& color) const;
-		//void setRenderTarget(EfWindow& wnd, EfDepthStencilBuffer& dsBuff) {}
 		void setRenderTarget(EfWindow& wnd);
 	private:
 		ID3D11Device* mdevice = nullptr;
@@ -117,12 +116,69 @@ namespace efgui
 
 		IDXGIFactory* createIDXGIFactory() const;
 		ID3D11Texture2D* createDSTextureForWnd(const EfWindow& wnd)const;
+
+		inline ID3D11VertexShader* createVertexShader(ID3DBlob* vFile) const;
+		inline ID3D11PixelShader* createPixelShader(ID3DBlob* pFile) const;
+		inline ID3D11InputLayout* createInputLayout(ID3DBlob* vFile, D3D11_INPUT_ELEMENT_DESC* desc, unsigned int num)const;
+		inline ID3D11Buffer* createBuffer(const D3D11_BUFFER_DESC& buffDesc, const D3D11_SUBRESOURCE_DATA& resDesc)const;
 	};
+
+
+
+	inline ID3D11VertexShader* EfPainter::createVertexShader(ID3DBlob* blob) const
+	{
+		HRESULT hr;
+		ID3D11VertexShader* vs;
+		ReCatch(hr = mdevice->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &vs));
+		return vs;
+	}
+
+	inline ID3D11PixelShader* EfPainter::createPixelShader(ID3DBlob* blob) const
+	{
+		HRESULT hr;
+		ID3D11PixelShader* ps;
+		ReCatch(hr = mdevice->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &ps));
+		return ps;
+	}
+
+	inline ID3D11InputLayout* EfPainter::createInputLayout(ID3DBlob* blob, D3D11_INPUT_ELEMENT_DESC* desc, unsigned int num) const
+	{
+		HRESULT hr;
+		ID3D11InputLayout* layout;
+		ReCatch(hr = mdevice->CreateInputLayout(desc, num, blob->GetBufferPointer(), blob->GetBufferSize(), &layout));
+		return layout;
+	}
+
+	inline ID3D11Buffer* EfPainter::createBuffer(const D3D11_BUFFER_DESC& buffDesc, const D3D11_SUBRESOURCE_DATA& resDesc) const
+	{
+		HRESULT hr;
+		ID3D11Buffer* buffer;
+		ReCatch(hr = mdevice->CreateBuffer(&buffDesc, &resDesc, &buffer));
+		return buffer;
+	}
+
 }
 
 
 
+namespace efgui
+{
+	struct Frustum2D
+	{
+		float width;
+		float height;
+	};
+	
+	struct Frustum3D
+	{
+		float width;
+		float height;
+		float focus; //distance between project plane and focus
+	};
+}
 
+
+#undef ReCatch
 #undef	_REL
 #undef	_CPP
 #undef	_MVP

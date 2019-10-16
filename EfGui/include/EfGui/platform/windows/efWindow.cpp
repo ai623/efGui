@@ -69,6 +69,12 @@ namespace efgui {
 					wnd->whenChar(wParam);
 					break;
 				}
+				case WM_IME_NOTIFY:
+				{
+					wnd->whenIME(wParam, lParam);
+					
+					break;
+				}
 				case WM_DESTROY:
 				{
 					wnd->whenDestroy();

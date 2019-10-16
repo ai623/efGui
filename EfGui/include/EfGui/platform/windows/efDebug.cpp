@@ -2,6 +2,8 @@
 #include <Windows.h>
 
 namespace efgui {
+	EfErrorCatcher efErrorCatcher;
+
 	void EfDebug::operator()(std::string str)
 	{
 		MessageBoxA(NULL, str.c_str(), "Message", MB_OK);
@@ -18,8 +20,6 @@ namespace efgui {
 		MessageBoxA(NULL, (str + ", Error code: " + std::to_string(errorCode)).c_str(), NULL, MB_OK);
 		exit(-1);
 	}
-
-
 
 	void efDebugMsg(const std::string& msg)
 	{

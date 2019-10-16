@@ -82,6 +82,7 @@ namespace efgui
 		virtual void whenKeyDown(WPARAM key) {}
 		virtual void whenKeyUp(WPARAM key){}
 		virtual void whenChar(WPARAM code) {}
+		virtual void whenIME(WPARAM notify, LPARAM command){}
 		//virtual EfWindow* clone();			//TODO
 	private:
 		HWND mhWnd = NULL;
