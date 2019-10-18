@@ -114,15 +114,50 @@ namespace efgui
 		ID3D11DeviceContext* getContext() const { return mcontext; }
 		D3D_FEATURE_LEVEL getLevel() const { return mlevel; }
 
+		inline void setVertexBuffer(ID3D11Buffer* buff,UINT eleSize, UINT startSlot = 0, UINT offset = 0) const;
+		inline void setVSConstantBuffer(ID3D11Buffer* buff, UINT startSlot = 0) const;
+		inline void setPSConstantBuffer(ID3D11Buffer* buff, UINT startSlot = 0) const;
+		inline void setPSShaderResources(ID3D11ShaderResourceView* res, UINT startSlot = 0) const;
+		inline void setPSSampler(ID3D11SamplerState* state)const;
+
 		IDXGIFactory* createIDXGIFactory() const;
 		ID3D11Texture2D* createDSTextureForWnd(const EfWindow& wnd)const;
 
 		inline ID3D11VertexShader* createVertexShader(ID3DBlob* vFile) const;
+		inline ID3D11VertexShader* createVertexShader(const std::wstring& path) const;
 		inline ID3D11PixelShader* createPixelShader(ID3DBlob* pFile) const;
-		inline ID3D11InputLayout* createInputLayout(ID3DBlob* vFile, D3D11_INPUT_ELEMENT_DESC* desc, unsigned int num)const;
+		inline ID3D11PixelShader* createPixelShader(const std::wstring& path) const;
+		inline ID3D11InputLayout* createInputLayout(ID3DBlob* vFile, const D3D11_INPUT_ELEMENT_DESC* desc, unsigned int num)const;
 		inline ID3D11Buffer* createBuffer(const D3D11_BUFFER_DESC& buffDesc, const D3D11_SUBRESOURCE_DATA& resDesc)const;
+		inline ID3D11SamplerState* createSamplerState(const D3D11_SAMPLER_DESC& desc)const;
 	};
 
+
+
+	inline void EfPainter::setVertexBuffer(ID3D11Buffer* buff,UINT stride, UINT startSlot, UINT offset) const
+	{
+		mcontext->IASetVertexBuffers(startSlot, 1, &buff, &stride, &offset);
+	}
+
+	inline void EfPainter::setVSConstantBuffer(ID3D11Buffer* buff, UINT startSlot) const
+	{
+		mcontext->VSSetConstantBuffers(startSlot, 1, &buff);
+	}
+
+	inline void EfPainter::setPSConstantBuffer(ID3D11Buffer* buff, UINT startSlot) const
+	{
+		mcontext->PSSetConstantBuffers(startSlot, 1, &buff);
+	}
+
+	inline void EfPainter::setPSShaderResources(ID3D11ShaderResourceView* res, UINT startSlot) const
+	{
+		mcontext->PSSetShaderResources(startSlot, 1, &res);
+	}
+
+	inline void EfPainter::setPSSampler(ID3D11SamplerState* state) const
+	{
+		mcontext->PSSetSamplers(0, 1, &state);
+	}
 
 
 	inline ID3D11VertexShader* EfPainter::createVertexShader(ID3DBlob* blob) const
@@ -130,6 +165,18 @@ namespace efgui
 		HRESULT hr;
 		ID3D11VertexShader* vs;
 		ReCatch(hr = mdevice->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &vs));
+		return vs;
+	}
+
+	inline ID3D11VertexShader* EfPainter::createVertexShader(const std::wstring& path) const
+	{
+		HRESULT hr;
+		ID3D11VertexShader* vs;
+		ID3DBlob* blob;
+
+		ReCatch(D3DReadFileToBlob(path.c_str(), &blob));
+		ReCatch(hr = mdevice->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &vs));
+
 		return vs;
 	}
 
@@ -141,7 +188,18 @@ namespace efgui
 		return ps;
 	}
 
-	inline ID3D11InputLayout* EfPainter::createInputLayout(ID3DBlob* blob, D3D11_INPUT_ELEMENT_DESC* desc, unsigned int num) const
+	inline ID3D11PixelShader* EfPainter::createPixelShader(const std::wstring& path) const
+	{
+		HRESULT hr;
+		ID3D11PixelShader* ps;
+		ID3DBlob* blob;
+
+		ReCatch(D3DReadFileToBlob(path.c_str(), &blob));
+		ReCatch(hr = mdevice->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &ps));
+		return ps;
+	}
+
+	inline ID3D11InputLayout* EfPainter::createInputLayout(ID3DBlob* blob,const D3D11_INPUT_ELEMENT_DESC* desc, unsigned int num) const
 	{
 		HRESULT hr;
 		ID3D11InputLayout* layout;
@@ -155,6 +213,14 @@ namespace efgui
 		ID3D11Buffer* buffer;
 		ReCatch(hr = mdevice->CreateBuffer(&buffDesc, &resDesc, &buffer));
 		return buffer;
+	}
+
+	inline ID3D11SamplerState* EfPainter::createSamplerState(const D3D11_SAMPLER_DESC& desc) const
+	{
+		HRESULT hr;
+		ID3D11SamplerState* sampler;
+		ReCatch(hr = mdevice->CreateSamplerState(&desc, &sampler));
+		return sampler;
 	}
 
 }

@@ -47,7 +47,7 @@ namespace efgui
 		EfResult operator() ();
 	};
 
-	struct EfWindow : EfTexture2D, EfRenderTarget
+	struct EfWindow
 	{
 		//destructor
 		virtual ~EfWindow() { _del(); }

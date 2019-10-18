@@ -1,13 +1,22 @@
 #include <string>
 #include <cassert>
+
 #include <wrl/client.h>
+#include <wrl/wrappers/corewrappers.h>
 #include <DirectXMath.h>
 
+#include <DirectXTK/Inc/WICTextureLoader.h>
+
 #include <EfGui/platform/windows/efGui.h>
+
 
 #define ComPtr Microsoft::WRL::ComPtr
 
 using namespace efgui;
+using std::wstring;
+using std::string;
+
+
 
 struct MyWindow : EfWindow, EfLoop 
 {
@@ -38,6 +47,11 @@ struct MyWindow : EfWindow, EfLoop
 		context->ClearRenderTargetView(getTargetView(), mclearColor);
 		context->ClearDepthStencilView(mdsView.Get(), D3D11_CLEAR_DEPTH, 1., 0);
 
+		if(1)
+		{
+			context->Draw(4, 0);
+		}
+
 		present();
 	}
 
@@ -58,15 +72,40 @@ struct MyWindow : EfWindow, EfLoop
 
 	}
 private:
+	struct Vertex2D
+	{
+		float x;
+		float y;
+	};
+
+	struct VertexTex2D
+	{
+		float x;
+		float y;
+		float u;
+		float v;
+	};
+
 	EfPoint<long> mmousePos;
 	float mclearColor[4]{ 0,0,0,1 };
 	D3D11_VIEWPORT mvp;
+	wstring mdirPath = L"../x64/Debug/";
 
 	ComPtr<ID3D11Texture2D> mdsBuff;
 	ComPtr<ID3D11DepthStencilView> mdsView;
+	ComPtr<ID3D11VertexShader> mvshader;
+	ComPtr<ID3D11PixelShader> mpshader;
+	ComPtr<ID3D11InputLayout> minputLy;
+
+	ComPtr<ID3D11Resource> mpicture;
+	ComPtr<ID3D11ShaderResourceView> mpictureView;
+	ComPtr<ID3D11Buffer> mvertexBuff;
+	ComPtr<ID3D11Buffer> mResolutionBuff;
+	ComPtr<ID3D11SamplerState> msamplerState;
 
 	void _init() 
 	{
+		HRESULT hr;
 		auto& painter = getPainter();
 		auto context = painter.getContext();
 		auto device = painter.getDevice();
@@ -80,8 +119,121 @@ private:
 		device->CreateDepthStencilView(mdsBuff.Get(), nullptr, &mdsView);
 
 		context->OMSetRenderTargets(1, &targetView, mdsView.Get());
+		if (1)
+		{
+			//create texture
+			Vertex2D resolution[2]{ {(float)rect.width, (float)rect.height} };
+			{
+				using DirectX::CreateWICTextureFromFile;
+				wstring pngName = L"huaji.jpg";
+				hr = CreateWICTextureFromFile(device, (mdirPath + pngName).c_str(), &mpicture, &mpictureView);
+			}
+
+			//create vs,ps,inputlayout
+			{
+				using namespace efd3d11::efwrapper;
+				using namespace efd3d11::efdesc;
+
+				wstring vsPath = mdirPath + L"VertexShader.cso", psPath = mdirPath + L"PixelShader.cso";
+				
+				const D3D11_INPUT_ELEMENT_DESC inputLy[]
+				{
+					{"POSITION",0,DXGI_FORMAT_R32G32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
+					{"TEXCOORD",0,DXGI_FORMAT_R32G32_FLOAT,0,8,D3D11_INPUT_PER_VERTEX_DATA,0 }
+				};
+
+				auto vBlob = readFileToBlob(vsPath); hr = efErrorCatcher.getHResult();
+				mvshader.Attach(painter.createVertexShader(vBlob)); hr = efErrorCatcher.getHResult();
+				mpshader.Attach(painter.createPixelShader(psPath)); hr = efErrorCatcher.getHResult();
+				minputLy.Attach(painter.createInputLayout(vBlob, inputLy, ARRAYSIZE(inputLy))); hr = efErrorCatcher.getHResult();
+				vBlob->Release();
+			}
+
+			//create vertex buffer
+			{
+				VertexTex2D rectangle[4];
+				Vertex2D rectPos{ 0,0 };
+				Vertex2D rectScale{ 400,400 };
+
+				genRect(rectPos, rectScale, rectangle,resolution[0]);
+				rectangle[0].u = 0; rectangle[0].v = 0;
+				rectangle[1].u = 1; rectangle[1].v = 0;
+				rectangle[2].u = 0; rectangle[2].v = 1;
+				rectangle[3].u = 1; rectangle[3].v = 1;
+
+				D3D11_SUBRESOURCE_DATA data;
+				D3D11_BUFFER_DESC desc;
+				desc.ByteWidth = sizeof(rectangle);
+				desc.Usage = D3D11_USAGE_IMMUTABLE;
+				desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+				desc.CPUAccessFlags = 0;
+				desc.MiscFlags = 0;
+				desc.StructureByteStride = 0;
+
+				data.pSysMem = rectangle;
+
+				mvertexBuff.Attach(painter.createBuffer(desc, data));
+			}
+
+			//create resolution buffer
+			{
+				D3D11_SUBRESOURCE_DATA data;
+				D3D11_BUFFER_DESC desc;
+
+				desc.ByteWidth = sizeof(resolution);
+				desc.Usage = D3D11_USAGE_IMMUTABLE;
+				desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+				desc.CPUAccessFlags = 0;
+				desc.MiscFlags = 0;
+				desc.StructureByteStride = 0;
+
+				data.pSysMem = resolution;
+
+				mResolutionBuff.Attach(painter.createBuffer(desc, data));
+			}
+
+			//create sampler state 
+			{
+				using efd3d11::efdesc::gefSamplerDesc;
+				auto desc = gefSamplerDesc;
+				//desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+				//desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+				//desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+				desc.BorderColor[3] = 0;
+				msamplerState.Attach(painter.createSamplerState(desc));
+				
+			}
+
+			//set context
+			{
+				context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+				context->IASetInputLayout(minputLy.Get());
+				painter.setVertexBuffer(mvertexBuff.Get(), sizeof(VertexTex2D));
+				painter.setVSConstantBuffer(mResolutionBuff.Get());
+				painter.setPSConstantBuffer(mResolutionBuff.Get());
+				painter.setPSShaderResources(mpictureView.Get());
+				painter.setPSSampler(msamplerState.Get());
+				context->VSSetShader(mvshader.Get(), nullptr, 0);
+				context->PSSetShader(mpshader.Get(), nullptr, 0);
+				
+			}
+		
+		}
 	}
 	void _uninit() { if (getWindowsNum() == 1) { efExec.quit(); } }
+
+	void genRect(Vertex2D& pos, Vertex2D& rect, VertexTex2D* data, Vertex2D& wh) {
+		float l,t,r,b;
+		l = pos.x *2 - wh.x;
+		t = -pos.y * 2 + wh.y;
+		r = l+ rect.x * 2;
+		b = t - rect.y * 2;
+
+		data[0] = { l,t };
+		data[1] = { r,t };
+		data[2] = { l,b } ;
+		data[3] = { r,b };
+	}
 };
 
 
@@ -91,10 +243,25 @@ int efMain() {
 	efGuiInit.enableDebugMode();
 	auto re = efGuiInit();
 
+//	{
+//#if (_WIN32_WINNT >= 0x0A00 /*_WIN32_WINNT_WIN10*/)
+//		Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
+//		if (FAILED(initialize))
+//			return 0;
+//#else
+//		HRESULT hr = CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
+//		if (FAILED(hr))
+//			return 0;
+//#endif
+//	}
+
+
 	//EfPainter pt;
 	MyWindow wnd;
 
 	efExec();
+
+	
 	return 0;
 }
 

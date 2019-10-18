@@ -46,6 +46,23 @@
     <ClCompile Include="include\EfGui\platform\windows\efMain.cpp" />
     <ClCompile Include="test\platform\testWindow.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="test\HLSL\PixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="test\HLSL\VertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test\HLSL\type.hlsli" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{4FFD11D2-520C-4F35-A9AE-EBC9157BF6DA}</ProjectGuid>
@@ -100,7 +117,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LibraryPath>$(SolutionDir)\EfGui\thirdParty\DirectXTK\Bin\Desktop_2019_Win10\x64\Debug;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)\EfGui\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\EfGui\include;$(SolutionDir)\EfGui\thirdParty;$(IncludePath)</IncludePath>
     <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

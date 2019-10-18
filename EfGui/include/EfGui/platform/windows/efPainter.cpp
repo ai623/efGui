@@ -99,6 +99,7 @@ namespace efgui
 		return true;
 	}
 
+
 	IDXGIFactory* EfPainter::createIDXGIFactory() const
 	{
 		HRESULT hr;

@@ -28,6 +28,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{ef99e6b3-4d9f-4123-ac8a-4717f51e5066}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\test">
+      <UniqueIdentifier>{a958ae57-ad33-49c9-8742-484b0c1fedd1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\EfGui\common\efCommon.h">
@@ -102,7 +105,20 @@
       <Filter>源文件\windows</Filter>
     </ClCompile>
     <ClCompile Include="include\EfGui\platform\windows\efD3d11Desc.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\windows</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="test\HLSL\VertexShader.hlsl">
+      <Filter>Shaders\test</Filter>
+    </FxCompile>
+    <FxCompile Include="test\HLSL\PixelShader.hlsl">
+      <Filter>Shaders\test</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test\HLSL\type.hlsli">
+      <Filter>Shaders\test</Filter>
+    </None>
   </ItemGroup>
 </Project>

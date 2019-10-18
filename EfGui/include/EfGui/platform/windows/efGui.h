@@ -4,6 +4,9 @@
 #include "efWindow.h"
 #include "efPainter.h"
 
+#include "efD3d11Wrapper.h"
+#include "efD3d11Desc.h"
+
 namespace efgui 
 {
 	struct EfGuiInit 
