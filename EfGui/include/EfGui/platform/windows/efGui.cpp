@@ -8,6 +8,9 @@ namespace efgui
 	EfResult EfGuiInit::operator()()
 	{
 		EfResult re;
+		_innerUsed::gdebugMode = mdebugMode;
+		_innerUsed::gmultiThread = mmultiThread;
+		_innerUsed::gsampleCount = msampleCount;
 		re = efWindowInit();
 		if (re)return re;
 		re = efPainterInit(mdebugMode, mmultiThread,msampleCount);

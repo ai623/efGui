@@ -6,19 +6,9 @@ namespace efgui
 {
 	namespace _innerUsed 
 	{
+		bool gdebugMode = false;
+		bool gmultiThread = false;
+		UINT gsampleCount = 1;
+	}
 
-	}
-	std::wstring getCurrentPath()
-	{
-		{
-			std::wstring path;
-			auto size = GetCurrentDirectoryW(0, nullptr);
-			auto buff = new wchar_t[size + 1];
-			GetCurrentDirectoryW(size, buff);
-			buff[size] = L'\0';
-			path = buff;
-			delete buff;
-			return path;
-		}
-	}
 }

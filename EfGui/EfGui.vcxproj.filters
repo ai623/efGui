@@ -31,6 +31,24 @@
     <Filter Include="Shaders\test">
       <UniqueIdentifier>{a958ae57-ad33-49c9-8742-484b0c1fedd1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\windows\d3d10_1">
+      <UniqueIdentifier>{7a227e6d-2040-4487-a2da-c7132aea45d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\windows\d3d10_1">
+      <UniqueIdentifier>{982f8745-cd64-40e7-a30e-4f4c2f536857}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\windows\d2d">
+      <UniqueIdentifier>{a8a39d2f-ccd0-4080-bb11-fd11dd8307d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\windows\d2d">
+      <UniqueIdentifier>{13f2ab9f-e03a-4018-8057-c8b0fb84765c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\windows\font">
+      <UniqueIdentifier>{48c3dca5-9f16-4787-981d-90528b5836b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\windows\font">
+      <UniqueIdentifier>{c8d7bf63-f8c7-4721-bca0-30f02f8cf320}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\EfGui\common\efCommon.h">
@@ -69,11 +87,35 @@
     <ClInclude Include="include\EfGui\platform\windows\efPainterManager.h">
       <Filter>头文件\windows</Filter>
     </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\efD3d11Desc.h">
+      <Filter>头文件\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\d3d10_1\efD3d10_1Wrapper.h">
+      <Filter>头文件\windows\d3d10_1</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\d2d\efD2dWrapper.h">
+      <Filter>头文件\windows\d2d</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\d3d10_1\efD3d10_1Painter.h">
+      <Filter>头文件\windows\d3d10_1</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\d2d\efD2dPainter.h">
+      <Filter>头文件\windows\d2d</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\efD3dWrapper.h">
+      <Filter>头文件\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\font\efFontPainter.h">
+      <Filter>头文件\windows\font</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\efSystemWrapper.h">
+      <Filter>头文件\windows</Filter>
+    </ClInclude>
     <ClInclude Include="include\EfGui\platform\windows\efD3d11Wrapper.h">
       <Filter>头文件\windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\EfGui\platform\windows\efD3d11Desc.h">
-      <Filter>头文件\windows</Filter>
+    <ClInclude Include="efdataType.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -101,10 +143,19 @@
     <ClCompile Include="include\EfGui\platform\windows\efPainter.cpp">
       <Filter>源文件\windows</Filter>
     </ClCompile>
-    <ClCompile Include="include\EfGui\platform\windows\efD3d11Wrapper.cpp">
+    <ClCompile Include="include\EfGui\platform\windows\efD3d11Desc.cpp">
       <Filter>源文件\windows</Filter>
     </ClCompile>
-    <ClCompile Include="include\EfGui\platform\windows\efD3d11Desc.cpp">
+    <ClCompile Include="include\EfGui\platform\windows\d3d10_1\efD3d10_1Painter.cpp">
+      <Filter>源文件\windows\d3d10_1</Filter>
+    </ClCompile>
+    <ClCompile Include="include\EfGui\platform\windows\font\efFontPainter.cpp">
+      <Filter>源文件\windows\font</Filter>
+    </ClCompile>
+    <ClCompile Include="include\EfGui\platform\windows\efSystem.cpp">
+      <Filter>源文件\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="include\EfGui\platform\windows\efD3d11Wrapper.cpp">
       <Filter>源文件\windows</Filter>
     </ClCompile>
   </ItemGroup>

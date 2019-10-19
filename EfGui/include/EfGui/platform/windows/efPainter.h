@@ -1,14 +1,11 @@
 #pragma once
-#include <EfGui/common/efCommon.h>
-
-//#include <Windows.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
 #include <string>
 
 #include "efCommon.h"
-#include <EfGui/common/efShape.h>
+
 
 #undef near
 #undef far
@@ -22,6 +19,7 @@ namespace efgui
 {
 	namespace _efPainter {
 		extern bool gdebugMode;
+		extern bool gmultiThread;
 		extern UINT gsampleCount;
 	}
 
@@ -120,7 +118,8 @@ namespace efgui
 		inline void setPSShaderResources(ID3D11ShaderResourceView* res, UINT startSlot = 0) const;
 		inline void setPSSampler(ID3D11SamplerState* state)const;
 
-		IDXGIFactory* createIDXGIFactory() const;
+		IDXGIDevice* createDXGIDevice() const;
+		IDXGIFactory* createDXGIFactory() const;
 		ID3D11Texture2D* createDSTextureForWnd(const EfWindow& wnd)const;
 
 		inline ID3D11VertexShader* createVertexShader(ID3DBlob* vFile) const;

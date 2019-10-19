@@ -1,6 +1,8 @@
 #pragma once
 #include <stdint.h>
 #include <string>
+
+#include <EfGui/common/efCommon.h>
 #include "efDebug.h"
 
 #define _EfGui_Debug_Msg(msg)						efDebugMsg(msg)
@@ -21,9 +23,11 @@ namespace efgui
 {
 	namespace _innerUsed 
 	{
-		
+		extern bool gdebugMode;
+		extern bool gmultiThread;
+		extern UINT gsampleCount;
 	}
 
-	std::wstring getCurrentPath();
+	
 }
 

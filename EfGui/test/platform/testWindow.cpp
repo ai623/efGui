@@ -8,6 +8,7 @@
 #include <DirectXTK/Inc/WICTextureLoader.h>
 
 #include <EfGui/platform/windows/efGui.h>
+#include <EfGui/platform/windows/font/efFontPainter.h>
 
 
 #define ComPtr Microsoft::WRL::ComPtr
@@ -127,11 +128,13 @@ private:
 				using DirectX::CreateWICTextureFromFile;
 				wstring pngName = L"huaji.jpg";
 				hr = CreateWICTextureFromFile(device, (mdirPath + pngName).c_str(), &mpicture, &mpictureView);
+				//using efd3d11::createDXGISurface;
+
 			}
 
 			//create vs,ps,inputlayout
 			{
-				using namespace efd3d11::efwrapper;
+				using namespace efd3d11;
 				using namespace efd3d11::efdesc;
 
 				wstring vsPath = mdirPath + L"VertexShader.cso", psPath = mdirPath + L"PixelShader.cso";
@@ -255,8 +258,10 @@ int efMain() {
 //#endif
 //	}
 
+	EfFontPainter pt;
+	auto family = pt.getSysFontFamily(L"Microsoft Yahei");
+	auto name = family.getFamilyName();
 
-	//EfPainter pt;
 	MyWindow wnd;
 
 	efExec();

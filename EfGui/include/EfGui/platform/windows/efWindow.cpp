@@ -124,7 +124,7 @@ namespace efgui {
 		return EfPoint<long>{pt.x, pt.y};
 	}
 
-	bool EfWindow::_init(EfPainter& painter, bool fullScreen, int sampleCount)
+	bool EfWindow::_init(EfPainter& painter, bool fullScreen, int sampleCount,bool asShaderInput)
 	{
 		using namespace _efWindow;
 		using namespace _innerUsed;
@@ -147,7 +147,7 @@ namespace efgui {
 			return false;
 		}
 		mpainter = painter;
-		if (_initD3dComponents(fullScreen, sampleCount)) {
+		if (_initD3dComponents(fullScreen, sampleCount, asShaderInput)) {
 			InvalidateRect(mhWnd, NULL, FALSE);	//post WM_PAINT message
 			return true;
 		}
@@ -173,14 +173,15 @@ namespace efgui {
 		mpainter.uninit();
 	}
 
-	bool EfWindow::_initD3dComponents(bool fullScreen, int sampleCount)
+	bool EfWindow::_initD3dComponents(bool fullScreen, int sampleCount, bool asShaderInput)
 	{
 		HRESULT hr;
 
 		DXGI_SWAP_CHAIN_DESC scDesc;
 		auto& bfDesc = scDesc.BufferDesc;
 		if (fullScreen) {
-			auto rect = efGetSysResolution();
+			
+			auto rect = efsystem::getSysResolution();
 			bfDesc.Width = rect.width;
 			bfDesc.Height = rect.height;
 			scDesc.Windowed = FALSE;
@@ -210,7 +211,12 @@ namespace efgui {
 		else {
 			scDesc.SampleDesc.Quality = 0;
 		}
-		scDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		if (asShaderInput) {
+			scDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
+		}
+		else {
+			scDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		}
 		scDesc.BufferCount = 1;
 		scDesc.OutputWindow = mhWnd;
 		scDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
@@ -222,7 +228,7 @@ namespace efgui {
 	bool EfWindow::_initD3dComponents(DXGI_SWAP_CHAIN_DESC& desc)
 	{
 		HRESULT hr;
-		auto factory = mpainter.createIDXGIFactory();
+		auto factory = mpainter.createDXGIFactory();
 		if (factory == nullptr) {
 			return false;
 		}
