@@ -108,14 +108,17 @@
     <ClInclude Include="include\EfGui\platform\windows\font\efFontPainter.h">
       <Filter>头文件\windows\font</Filter>
     </ClInclude>
-    <ClInclude Include="include\EfGui\platform\windows\efSystemWrapper.h">
-      <Filter>头文件\windows</Filter>
-    </ClInclude>
     <ClInclude Include="include\EfGui\platform\windows\efD3d11Wrapper.h">
       <Filter>头文件\windows</Filter>
     </ClInclude>
-    <ClInclude Include="efdataType.h">
+    <ClInclude Include="include\EfGui\common\efdataType.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\efCamera.h">
+      <Filter>头文件\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\efShapeCompute.h">
+      <Filter>头文件\windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +160,9 @@
     </ClCompile>
     <ClCompile Include="include\EfGui\platform\windows\efD3d11Wrapper.cpp">
       <Filter>源文件\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="include\EfGui\platform\windows\efCamera.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

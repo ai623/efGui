@@ -5,6 +5,7 @@
 #include <string>
 
 #include "efCommon.h"
+#include "efCamera.h"
 
 
 #undef near
@@ -64,6 +65,9 @@ namespace efgui
 
 		bool init(const EfAdapter& adp, UINT index) { _del(); return _init(adp.madapter, index); }
 		void uninit() { _uninit(); }
+
+		IDXGIOutput* getDXGIOutput() const { return moutput; }
+		HMONITOR getHMonitor() const { DXGI_OUTPUT_DESC desc; moutput->GetDesc(&desc); return desc.Monitor; }
 	private:
 		IDXGIOutput* moutput = nullptr;
 
@@ -119,6 +123,7 @@ namespace efgui
 		inline void setPSSampler(ID3D11SamplerState* state)const;
 
 		IDXGIDevice* createDXGIDevice() const;
+		IDXGIAdapter* createDXGIAdpter() const;
 		IDXGIFactory* createDXGIFactory() const;
 		ID3D11Texture2D* createDSTextureForWnd(const EfWindow& wnd)const;
 

@@ -110,21 +110,34 @@ namespace efgui
 		return dxgiDevice;
 	}
 
+	IDXGIAdapter* EfPainter::createDXGIAdpter() const
+	{
+		HRESULT hr;
+		IDXGIDevice* dxgiDevice;
+		IDXGIAdapter* adapter;
+
+		hr = mdevice->QueryInterface(IID_PPV_ARGS(&dxgiDevice));
+		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfPainter: Fail to createDXGIFactory", hr); _REL(dxgiDevice); return nullptr; }
+		hr = dxgiDevice->GetParent(IID_PPV_ARGS(&adapter));
+		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfPainter: Fail to createDXGIFactory", hr); _REL(dxgiDevice); _REL(adapter); return nullptr; }
+		return adapter;
+	}
+
 	IDXGIFactory* EfPainter::createDXGIFactory() const
 	{
 		HRESULT hr;
 		IDXGIDevice* dxgiDevice;
-		IDXGIAdapter* adaptor;
+		IDXGIAdapter* adapter;
 		IDXGIFactory* factory;
 
 		hr = mdevice->QueryInterface(IID_PPV_ARGS(&dxgiDevice));
 		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfPainter: Fail to createDXGIFactory", hr); _REL(dxgiDevice); return nullptr; }
-		hr = dxgiDevice->GetParent(IID_PPV_ARGS(&adaptor));
-		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfPainter: Fail to createDXGIFactory", hr); _REL(dxgiDevice); _REL(adaptor); return nullptr; }
-		hr = adaptor->GetParent(IID_PPV_ARGS(&factory));
-		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfPainter: Fail to createDXGIFactory", hr); _REL(dxgiDevice); _REL(adaptor);  _REL(factory); return nullptr; }
+		hr = dxgiDevice->GetParent(IID_PPV_ARGS(&adapter));
+		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfPainter: Fail to createDXGIFactory", hr); _REL(dxgiDevice); _REL(adapter); return nullptr; }
+		hr = adapter->GetParent(IID_PPV_ARGS(&factory));
+		if (FAILED(hr)) { _EfGui_Debug_Warning_Msg_Code("EfPainter: Fail to createDXGIFactory", hr); _REL(dxgiDevice); _REL(adapter);  _REL(factory); return nullptr; }
 		dxgiDevice->Release();
-		adaptor->Release();
+		adapter->Release();
 		return factory;
 	}
 

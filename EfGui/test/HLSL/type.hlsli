@@ -4,7 +4,8 @@ struct VSOUT
 	float2 texPos : TEXCOORD;
 };
 
-cbuffer VS_INPUT : register(b0)
+cbuffer Camera2DInfo : register(b0)
 {
-	float2 gresolution;
+	float2 gratio;
+	float2 gbias;
 };

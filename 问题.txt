@@ -1,0 +1,14 @@
+文字渲染缓存机制：
+当前页面，2D纹理
+当前语言常用字，数组
+ASCII字符，数组
+当前语言LRU，数组
+LRU，散列表+双向链表
+
+
+文字渲染策略：
+1.每次绑定一个字体纹理多次draw
+2.通过copySubresourceRegion，更新一张大纹理图，一次draw
+3.通过map更新，一次draw
+4.使用texture2d array，按字更新，一次draw
+5.使用texture2d array，按行更新，一次draw

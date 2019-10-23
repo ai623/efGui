@@ -19,14 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="efdataType.h" />
     <ClInclude Include="include\EfGui\common\efCommon.h" />
+    <ClInclude Include="include\EfGui\common\efdataType.h" />
     <ClInclude Include="include\EfGui\common\efGCObj.h" />
     <ClInclude Include="include\EfGui\common\efShape.h" />
     <ClInclude Include="include\EfGui\platform\windows\d2d\efD2dPainter.h" />
     <ClInclude Include="include\EfGui\platform\windows\d2d\efD2dWrapper.h" />
     <ClInclude Include="include\EfGui\platform\windows\d3d10_1\efD3d10_1Wrapper.h" />
     <ClInclude Include="include\EfGui\platform\windows\d3d10_1\efD3d10_1Painter.h" />
+    <ClInclude Include="include\EfGui\platform\windows\efCamera.h" />
     <ClInclude Include="include\EfGui\platform\windows\efCommon.h" />
     <ClInclude Include="include\EfGui\platform\windows\efD3d11Desc.h" />
     <ClInclude Include="include\EfGui\platform\windows\efD3d11Wrapper.h" />
@@ -36,14 +37,15 @@
     <ClInclude Include="include\EfGui\platform\windows\efGui.h" />
     <ClInclude Include="include\EfGui\platform\windows\efPainter.h" />
     <ClInclude Include="include\EfGui\platform\windows\efPainterManager.h" />
+    <ClInclude Include="include\EfGui\platform\windows\efShapeCompute.h" />
     <ClInclude Include="include\EfGui\platform\windows\efSystem.h" />
-    <ClInclude Include="include\EfGui\platform\windows\efSystemWrapper.h" />
     <ClInclude Include="include\EfGui\platform\windows\efWindow.h" />
     <ClInclude Include="include\EfGui\platform\windows\efMain.h" />
     <ClInclude Include="include\EfGui\platform\windows\font\efFontPainter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\EfGui\platform\windows\d3d10_1\efD3d10_1Painter.cpp" />
+    <ClCompile Include="include\EfGui\platform\windows\efCamera.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efCommon.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efD3d11Desc.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efD3d11Wrapper.cpp" />
