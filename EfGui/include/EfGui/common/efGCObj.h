@@ -9,12 +9,14 @@ namespace efgui
 	{
 	private:
 		using T = uint32_t;
+
 	public:
-		T getRefCount() { return refCount; }
+		virtual ~EfGCObj() {}
+		T getRefCount() { return mrefCount; }
+		void addRef() { mrefCount++; }
+		void delRef() { mrefCount--; if (mrefCount == 0) delete this; }
 	private:
-		void addRef() { refCount++; }
-		void delRef() { refCount--; }
-		T refCount = 1;
+		T mrefCount = 1;
 
 		template <typename T>friend struct EfGCPtr;
 	};
@@ -35,6 +37,8 @@ namespace efgui
 			return static_cast<T*>(mgcObj);
 		}
 
+		T* get() { return mgcObj; }
+
 	private:
 		T* mgcObj = nullptr;
 		void _copy(const EfGCPtr& p)
@@ -53,10 +57,6 @@ namespace efgui
 		{
 			if (mgcObj) {
 				mgcObj->delRef();
-				if (mgcObj->getRefCount() == 0) {
-					delete mgcObj;
-					mgcObj = nullptr;
-				}
 			}
 		}
 	};

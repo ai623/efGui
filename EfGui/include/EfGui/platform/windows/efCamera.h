@@ -1,4 +1,7 @@
 #pragma once
+#include <Windows.h>
+
+#include <EfGui/common/efGCObj.h>
 
 namespace efgui
 {
@@ -15,30 +18,38 @@ namespace efgui
 
 	};
 
-	struct IEfCamera2D
+	struct IEfCamera2D : EfGCObj
 	{
 		virtual ~IEfCamera2D() {}
-		virtual void getCamera2DInfo(EfCamera2DInfo&) = 0;
+		virtual void getCamera2DInfo(EfCamera2DInfo&) const = 0;
 	};
 
-	struct IEfCamera3D
+	struct IEfCamera3D : EfGCObj
 	{
 		virtual ~IEfCamera3D() {}
-		virtual void getCamera3DInfo(EfCamera3DInfo&) = 0;
+		virtual void getCamera3DInfo(EfCamera3DInfo&) const = 0;
 	};
 
 	struct EfCamera2D : IEfCamera2D
 	{
-		virtual void getCamera2DInfo(EfCamera2DInfo& info);
+		virtual void getCamera2DInfo(EfCamera2DInfo& info) const;
 		void setWidthHeight(float width, float height);
 		void setCenterPos(float x, float y);
 		void setLTPos(float x, float y);					//Depends on the current width and height!
-	private:
+	protected:
 		float mmidX = 0;
 		float mmidY = 0;
 		float mWidth = 1;
 		float mHeight = 1;
 	};
+
+	struct EfDpiCamera2D : EfCamera2D
+	{
+		virtual void getCamera2DInfo(EfCamera2DInfo& info) const;
+	protected:
+		float mdpi = (float) GetDpiForSystem();
+	};
+
 }
 
 namespace efgui
@@ -60,4 +71,5 @@ namespace efgui
 		mWidth = width;
 		mHeight = height;
 	}
+
 }

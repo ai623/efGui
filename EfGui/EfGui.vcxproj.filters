@@ -120,6 +120,9 @@
     <ClInclude Include="include\EfGui\platform\windows\efShapeCompute.h">
       <Filter>头文件\windows</Filter>
     </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\efTextWorld.h">
+      <Filter>头文件\windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test\platform\testWindow.cpp">
@@ -162,6 +165,9 @@
       <Filter>源文件\windows</Filter>
     </ClCompile>
     <ClCompile Include="include\EfGui\platform\windows\efCamera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="include\EfGui\platform\windows\efTextWorld.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

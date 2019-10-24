@@ -11,6 +11,7 @@
 #include <EfGui/platform/windows/font/efFontPainter.h>
 #include <EfGui/platform/windows/efCamera.h>
 #include <EfGui/platform/windows/efShapeCompute.h>
+#include <EfGui/platform/windows/efTextWorld.h>
 
 
 #define ComPtr Microsoft::WRL::ComPtr
@@ -191,15 +192,24 @@ private:
 		}
 
 		//create blend state
-		if(0)
+		
 		{
 			D3D11_BLEND_DESC desc{};
+			
 			desc.IndependentBlendEnable = FALSE;
 			auto& RTBDesc = desc.RenderTarget[0];
 			RTBDesc.BlendEnable = TRUE;
+			//a_src * c_srac + (1-a_src) * c _ dst
+			RTBDesc.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+			RTBDesc.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+			RTBDesc.BlendOp = D3D11_BLEND_OP_ADD;
+			//a = a_dst
+			RTBDesc.SrcBlendAlpha = D3D11_BLEND_ZERO;
+			RTBDesc.DestBlendAlpha = D3D11_BLEND_DEST_ALPHA;
+			RTBDesc.BlendOpAlpha = D3D11_BLEND_OP_ADD;
 
+			RTBDesc.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-			desc.RenderTarget->BlendEnable = TRUE;
 			hr = device->CreateBlendState(&desc, &mblendState);
 		}
 
@@ -319,6 +329,7 @@ private:
 			context->PSSetShader(mpshader.Get(), nullptr, 0);
 
 			//context->RSSetState(mrasterState.Get());
+			context->OMSetBlendState(mblendState.Get(), nullptr, 0xffffffff);
 			context->RSSetViewports(1, &mviewport);
 			context->OMSetRenderTargets(1, &targetView, mdsView.Get());
 		}
@@ -359,6 +370,11 @@ int efMain() {
 //	}
 
 
+	EfGCPtr<IEfCamera2D> camera(new EfCamera2D());
+	EfTextWorld world;
+	world.setCamera(camera);
+
+	
 
 	MyWindow wnd;
 

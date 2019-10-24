@@ -39,6 +39,7 @@
     <ClInclude Include="include\EfGui\platform\windows\efPainterManager.h" />
     <ClInclude Include="include\EfGui\platform\windows\efShapeCompute.h" />
     <ClInclude Include="include\EfGui\platform\windows\efSystem.h" />
+    <ClInclude Include="include\EfGui\platform\windows\efTextWorld.h" />
     <ClInclude Include="include\EfGui\platform\windows\efWindow.h" />
     <ClInclude Include="include\EfGui\platform\windows\efMain.h" />
     <ClInclude Include="include\EfGui\platform\windows\font\efFontPainter.h" />
@@ -54,6 +55,7 @@
     <ClCompile Include="include\EfGui\platform\windows\efGui.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efPainter.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efSystem.cpp" />
+    <ClCompile Include="include\EfGui\platform\windows\efTextWorld.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efWindow.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\efMain.cpp" />
     <ClCompile Include="include\EfGui\platform\windows\font\efFontPainter.cpp" />
