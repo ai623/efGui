@@ -87,7 +87,7 @@ namespace efgui
 	struct EfPainter
 	{
 		~EfPainter() { _del(); }
-		EfPainter(EfNoInit) {}
+		EfPainter(EfNoInit) { }
 		EfPainter() { _init(nullptr, _efPainter::gdebugMode); }
 		EfPainter(const EfPainter& pt) { _copy(pt); }
 		EfPainter(EfPainter&& pt) { _move(std::move(pt)); }
@@ -230,22 +230,6 @@ namespace efgui
 }
 
 
-
-namespace efgui
-{
-	struct Frustum2D
-	{
-		float width;
-		float height;
-	};
-	
-	struct Frustum3D
-	{
-		float width;
-		float height;
-		float focus; //distance between project plane and focus
-	};
-}
 
 
 #undef ReCatch

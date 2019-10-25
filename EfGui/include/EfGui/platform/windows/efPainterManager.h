@@ -7,19 +7,8 @@ namespace efgui {
 		virtual void getTextureDesc(D3D11_TEXTURE2D_DESC& desc) const = 0;
 	};
 
-	struct EfRenderTarget
-	{
-		//virtual ID3D11RenderTargetView* createTargetView() const = 0;
-		//virtual void getTextureDesc(D3D11_TEXTURE2D_DESC& desc) const = 0;
-		virtual ID3D11RenderTargetView* getTargetView()const = 0;
-	};
 
-	struct EfDepthStencilCreator
-	{
-		virtual ID3D11DepthStencilView* create(const EfPainter& pt, const D3D11_VIEWPORT& text) const = 0;
-	};
-
-	struct EfPainterManagerDesc
+	struct EfPainterManagerInfo
 	{
 		bool hasSetRenderTarget = false;
 	};
@@ -31,9 +20,9 @@ namespace efgui {
 	//Do not manage viewport
 	//Do not manage depth buffer
 	//draw() method may also set painter
-	struct EfPainterManager
+	struct IEfPainterManager
 	{
-		virtual ~EfPainterManager() {}
+		virtual ~IEfPainterManager() {}
 
 		//initiate data but not set painter context
 		//shared: share resource between different painters
@@ -43,27 +32,25 @@ namespace efgui {
 		virtual void uninit() = 0;
 
 		//for nonshared manager, it will recreate resources
-		virtual bool changePainter(const EfPainter& pt) = 0;
+		virtual void setPainter(EfPainter& pt) = 0;
 
-		virtual bool changeViewport(const D3D11_VIEWPORT& vp) = 0;
+		//setCamera()
 
 		//Get dscription about what it does about the painter
-		virtual bool get(EfPainterManagerDesc& desc)const = 0;
+		virtual void get(EfPainterManagerInfo& desc)const = 0;
 
 		//Get Infomation read by users.
 		virtual std::string getInfo() const = 0;
 
 		//backup data for recover painter context
-		virtual bool backup(EfPainterManager& manager) const = 0;
-
-		//set painter
-		virtual bool set(EfPainter& painter) = 0;
+		virtual void backupContext(IEfPainterManager& manager) const = 0;
 
 		//create texture need for binding
-		virtual ID3D11DepthStencilView* create(const EfTexture2D& text) const = 0;
+		//virtual ID3D11DepthStencilView* create(const EfTexture2D& text) const = 0;
 
-		//virtual bool draw() = 0;
+		virtual void setContext() = 0;
+
+		virtual void draw() = 0;
 	};
-
 }
 

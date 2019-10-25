@@ -25,11 +25,25 @@ namespace efgui
 	private:
 		ComPtr<IDWriteFontFamily> mfamily;
 		friend struct EfFontPainter;
+		friend struct EfDWriteFontCollection;
 	};
 
+	struct EfDWriteFontCollection
+	{
+		EfDWriteFontCollection() { _init(); }
+		UINT32 getFontNum()const;
+		EfDWriteFontFamily getFontFamily(UINT32 index) const;
+		EfDWriteFontFamily getFontFamily(const std::wstring& familyName) const;
+
+	private:
+		ComPtr<IDWriteFontCollection> mfontCollection;
+
+		bool _init();
+	};
 
 	struct EfFontPainter
 	{
+		static bool initialize();
 		EfFontPainter() { _init(); }
 
 		void setFormat(ComPtr<IDWriteTextFormat> format) { mfontFormat = format; }
@@ -41,6 +55,7 @@ namespace efgui
 		EfDWriteFontFamily getSysFontFamily(UINT32 index) const;
 		EfDWriteFontFamily getSysFontFamily(const std::wstring& familyName) const;
 		bool getSysFontFamilyIndex(const std::wstring& familyName, UINT32& index) const;
+
 		IDWriteTextLayout* getTextLayout() const { return mtextLayout.Get(); }
 		void getTextLayoutWidthHeight(float& width, float& height) const;
 
@@ -62,6 +77,45 @@ namespace efgui
 
 		bool _init();
 	};
+
+
+
+
+
+
+
+
+	inline UINT32 EfDWriteFontCollection::getFontNum() const
+	{
+		return mfontCollection->GetFontFamilyCount();
+	}
+
+	inline EfDWriteFontFamily EfDWriteFontCollection::getFontFamily(UINT32 index) const
+	{
+		EfDWriteFontFamily fontFamily;
+		mfontCollection->GetFontFamily(index, &fontFamily.mfamily);
+		return fontFamily;
+	}
+
+	inline EfDWriteFontFamily EfDWriteFontCollection::getFontFamily(const std::wstring& familyName) const
+	{
+		BOOL exists;
+		UINT32 index;
+		EfDWriteFontFamily fontFamily;
+		mfontCollection->FindFamilyName(familyName.c_str(), &index, &exists);
+		if (exists) {
+			mfontCollection->GetFontFamily(index, &fontFamily.mfamily);
+			return fontFamily;
+		}
+		return fontFamily;
+	}
+
+
+
+
+
+
+
 
 
 

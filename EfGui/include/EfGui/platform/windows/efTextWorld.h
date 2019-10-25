@@ -1,9 +1,14 @@
 #pragma once
 #include <string>
 
+#include <d2d1.h>
+#include <dwrite.h>
 #include <wrl/client.h>
 
 #include "efCamera.h"
+#include "efPainter.h"
+#include "d3d10_1/efD3d10_1Painter.h"
+#include "font/efFontPainter.h"
 
 #define string std::string
 #define wstring std::wstring
@@ -14,35 +19,35 @@ namespace efgui
 
 	struct EfTextWorld
 	{
-		void setCamera(EfGCPtr<IEfCamera2D> camera);
-		void setCamera(IEfCamera2D& camera);
-		IEfCamera2D& getCamera();
+		EfDpiCamera2D camera;
 
-		static bool initialize();
+		EfTextWorld() { _init(); }
+
+		void setPainter(EfPainter& pt) { mpainter = pt; }
+
+		bool setSysFontFormat(const wstring& format);
+		void setFontSize(float size) { mfontSize = size; }
+		void setText(const wstring& text) { mtext = text; }
+		void setText(wstring&& text) { mtext = text; }
+		//void setLineWrapMode(bool enable);
+
 	private:
 		wstring mtext;
-		EfGCPtr<IEfCamera2D> mcamera;
+		float mfontSize = 16;
+
+		EfPainter mpainter = EfPainter(EfNoInit());
+
+		ComPtr<IDWriteFactory> mdwriteFactory;
+		ComPtr<IDWriteTextFormat> mtextFormat;
+		ComPtr<IDWriteTextLayout> mtextLayout;
+
+		bool _init();
 	};
 }
 
 
 namespace efgui
 {
-	inline void EfTextWorld::setCamera(EfGCPtr<IEfCamera2D> camera)
-	{
-		mcamera = camera;
-	}
-
-	inline void EfTextWorld::setCamera(IEfCamera2D& camera)
-	{
-		camera.addRef();
-		mcamera = &camera;
-	}
-
-	inline IEfCamera2D& EfTextWorld::getCamera() 
-	{
-		return *mcamera.get();
-	}
 }
 
 #undef string

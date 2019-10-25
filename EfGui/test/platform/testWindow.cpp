@@ -369,12 +369,7 @@ int efMain() {
 //#endif
 //	}
 
-
-	EfGCPtr<IEfCamera2D> camera(new EfCamera2D());
 	EfTextWorld world;
-	world.setCamera(camera);
-
-	
 
 	MyWindow wnd;
 

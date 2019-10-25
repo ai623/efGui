@@ -49,6 +49,9 @@
     <Filter Include="源文件\windows\font">
       <UniqueIdentifier>{c8d7bf63-f8c7-4721-bca0-30f02f8cf320}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\windows\painterManager">
+      <UniqueIdentifier>{4f956902-c758-4bc6-a704-178d0fbf0901}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\EfGui\common\efCommon.h">
@@ -82,9 +85,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\EfGui\platform\windows\efSystem.h">
-      <Filter>头文件\windows</Filter>
-    </ClInclude>
-    <ClInclude Include="include\EfGui\platform\windows\efPainterManager.h">
       <Filter>头文件\windows</Filter>
     </ClInclude>
     <ClInclude Include="include\EfGui\platform\windows\efD3d11Desc.h">
@@ -122,6 +122,12 @@
     </ClInclude>
     <ClInclude Include="include\EfGui\platform\windows\efTextWorld.h">
       <Filter>头文件\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\efPainterManager.h">
+      <Filter>头文件\windows\painterManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EfGui\platform\windows\efScene.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

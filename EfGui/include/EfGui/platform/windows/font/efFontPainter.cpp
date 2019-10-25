@@ -42,6 +42,53 @@ namespace efgui
 #undef Error_Check
 	}
 
+
+
+
+
+	bool EfDWriteFontCollection::_init()
+	{
+		ComPtr<IDWriteFactory> factory = efd2d::createDWriteFactoryCom();
+		if (factory.Get() == nullptr)return false;
+		factory->GetSystemFontCollection(&mfontCollection);
+		if (mfontCollection.Get() == nullptr) return false;
+		return true;
+	}
+
+
+
+
+
+
+
+
+	
+	bool EfFontPainter::initialize()
+	{
+		HRESULT hr;
+		{
+			if (_innerUsed::gmultiThread)
+				md2dFactory = efd2d::createD2D1FactoryCom(D2D1_FACTORY_TYPE_MULTI_THREADED);
+			else {
+				md2dFactory = efd2d::createD2D1FactoryCom(D2D1_FACTORY_TYPE_SINGLE_THREADED);
+			}
+			if (md2dFactory.Get() == nullptr)
+				return false;
+		}
+
+		{
+			mdwriteFactory = efd2d::createDWriteFactoryCom();
+			if (!mdwriteFactory) return false;
+		}
+
+		{
+			hr = mdwriteFactory->GetSystemFontCollection(&msysFontCollection, TRUE);
+			if (FAILED(hr)) return false;
+		}
+
+		return true;
+	}
+
 	bool EfFontPainter::_init()
 	{
 		HRESULT hr;
@@ -61,7 +108,7 @@ namespace efgui
 		}
 
 		if (mdwriteFactory.Get() == nullptr) {
-			mdwriteFactory = efd2d::createDWriteFactory();
+			mdwriteFactory = efd2d::createDWriteFactoryCom();
 			if (!mdwriteFactory) return false;
 		}
 
@@ -205,6 +252,8 @@ namespace efgui
 #undef Check_Error
 	}
 
+
+
 	void EfFontPainter::setSysFormat(const std::wstring& name, float fontSize)
 	{
 		HRESULT hr;
@@ -219,6 +268,8 @@ namespace efgui
 			&mfontFormat
 		);
 	}
+
+
 
 
 

@@ -20,7 +20,7 @@ namespace efgui
 		}
 
 		
-		inline ComPtr<IDWriteFactory> createDWriteFactory() {
+		inline ComPtr<IDWriteFactory> createDWriteFactoryCom() {
 			ComPtr<IDWriteFactory> factory;
 			HRESULT hr;
 			hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory),&factory);

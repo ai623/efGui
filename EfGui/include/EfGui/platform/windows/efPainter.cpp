@@ -63,7 +63,7 @@ namespace efgui
 		HRESULT hr;
 		
 		UINT flags = 0;
-		//flags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;			//for supporting d2d
+		flags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;			//for supporting d2d
 		if (!_efPainter::gmultiThread) {
 			flags |= D3D11_CREATE_DEVICE_SINGLETHREADED;
 		}

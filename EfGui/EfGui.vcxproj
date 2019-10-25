@@ -37,6 +37,7 @@
     <ClInclude Include="include\EfGui\platform\windows\efGui.h" />
     <ClInclude Include="include\EfGui\platform\windows\efPainter.h" />
     <ClInclude Include="include\EfGui\platform\windows\efPainterManager.h" />
+    <ClInclude Include="include\EfGui\platform\windows\efScene.h" />
     <ClInclude Include="include\EfGui\platform\windows\efShapeCompute.h" />
     <ClInclude Include="include\EfGui\platform\windows\efSystem.h" />
     <ClInclude Include="include\EfGui\platform\windows\efTextWorld.h" />

@@ -18,13 +18,13 @@ namespace efgui
 
 	};
 
-	struct IEfCamera2D : EfGCObj
+	struct IEfCamera2D //: EfGCObj
 	{
 		virtual ~IEfCamera2D() {}
 		virtual void getCamera2DInfo(EfCamera2DInfo&) const = 0;
 	};
 
-	struct IEfCamera3D : EfGCObj
+	struct IEfCamera3D //: EfGCObj
 	{
 		virtual ~IEfCamera3D() {}
 		virtual void getCamera3DInfo(EfCamera3DInfo&) const = 0;
