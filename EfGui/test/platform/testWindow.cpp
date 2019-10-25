@@ -371,6 +371,7 @@ int efMain() {
 
 	EfTextWorld world;
 
+
 	MyWindow wnd;
 
 	efExec();
